@@ -1,0 +1,7 @@
+trial,reference,left,right,chosen,quality_params
+0,ref_image.png,image_2.png,image_3.png,image_3.png,"{'image_2.png': 0.0, 'image_3.png': 0.0, 'image_1.png': 0.0}"
+1,ref_image.png,image_2.png,image_1.png,image_2.png,"{'image_2.png': -0.025, 'image_3.png': 0.025, 'image_1.png': 0.0}"
+2,ref_image.png,image_3.png,image_2.png,image_3.png,"{'image_2.png': 0.0003124837249755194, 'image_3.png': 0.025, 'image_1.png': -0.02531248372497552}"
+3,ref_image.png,image_1.png,image_2.png,image_2.png,"{'image_2.png': -0.024378937993950196, 'image_3.png': 0.04969142171892572, 'image_1.png': -0.02531248372497552}"
+4,ref_image.png,image_3.png,image_1.png,image_3.png,"{'image_2.png': 0.0006093926852594814, 'image_3.png': 0.04969142171892572, 'image_1.png': -0.0503008144041852}"
+5,ref_image.png,image_1.png,image_3.png,image_3.png,"{'image_2.png': 0.0006093926852594814, 'image_3.png': 0.07344255915124126, 'image_1.png': -0.07405195183650073}"

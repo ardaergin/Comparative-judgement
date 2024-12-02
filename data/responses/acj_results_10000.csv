@@ -1,0 +1,13 @@
+trial,reference,left,right,chosen,quality_params
+0,ref_image.png,ref_image.png,image_2.png,ref_image.png,"{'ref_image.png': 0.0, 'image_2.png': 0.0, 'image_3.png': 0.0, 'image_1.png': 0.0}"
+1,ref_image.png,image_3.png,image_1.png,image_1.png,"{'ref_image.png': 0.025, 'image_2.png': -0.025, 'image_3.png': 0.0, 'image_1.png': 0.0}"
+2,ref_image.png,ref_image.png,image_1.png,ref_image.png,"{'ref_image.png': 0.025, 'image_2.png': -0.025, 'image_3.png': -0.025, 'image_1.png': 0.025}"
+3,ref_image.png,image_2.png,image_3.png,image_3.png,"{'ref_image.png': 0.05, 'image_2.png': -0.025, 'image_3.png': -0.025, 'image_1.png': 0.0}"
+4,ref_image.png,image_1.png,image_3.png,image_1.png,"{'ref_image.png': 0.05, 'image_2.png': -0.05, 'image_3.png': 0.0, 'image_1.png': 0.0}"
+5,ref_image.png,image_3.png,image_2.png,image_2.png,"{'ref_image.png': 0.05, 'image_2.png': -0.05, 'image_3.png': -0.025, 'image_1.png': 0.025}"
+6,ref_image.png,image_1.png,ref_image.png,image_1.png,"{'ref_image.png': 0.05, 'image_2.png': -0.024687516275024482, 'image_3.png': -0.05031248372497552, 'image_1.png': 0.025}"
+7,ref_image.png,image_2.png,ref_image.png,image_2.png,"{'ref_image.png': 0.024687516275024482, 'image_2.png': -0.024687516275024482, 'image_3.png': -0.05031248372497552, 'image_1.png': 0.05031248372497552}"
+8,ref_image.png,ref_image.png,image_3.png,image_3.png,"{'ref_image.png': -0.0009295462758618471, 'image_2.png': 0.0009295462758618471, 'image_3.png': -0.05031248372497552, 'image_1.png': 0.05031248372497552}"
+9,ref_image.png,image_3.png,ref_image.png,image_3.png,"{'ref_image.png': -0.026546707577778484, 'image_2.png': 0.0009295462758618471, 'image_3.png': -0.024695322423058885, 'image_1.png': 0.05031248372497552}"
+10,ref_image.png,image_2.png,image_1.png,image_1.png,"{'ref_image.png': -0.05152356526995476, 'image_2.png': 0.0009295462758618471, 'image_3.png': 0.000281535269117391, 'image_1.png': 0.05031248372497552}"
+11,ref_image.png,image_1.png,image_2.png,image_1.png,"{'ref_image.png': -0.05152356526995476, 'image_2.png': -0.02345329242222152, 'image_3.png': 0.000281535269117391, 'image_1.png': 0.07469532242305889}"

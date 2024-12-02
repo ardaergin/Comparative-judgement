@@ -57,7 +57,7 @@ class AdaptiveComparativeJudgementExperiment:
         
         return participant_info
     
-    def _generate_image_pool(self, pool_size=100):
+    def _generate_image_pool(self, pool_size=10):
         """
         Generate a pool of synthetic images for demonstration
         In a real experiment, replace with actual image loading
