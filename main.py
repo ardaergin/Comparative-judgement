@@ -17,7 +17,6 @@ practice_rounds = 3
 
 # Set up PsychoPy window
 win = visual.Window(
-    size=(1024, 768),
     fullscr=True,
     color=[1, 1, 1],
     units='pix'
@@ -26,11 +25,12 @@ win = visual.Window(
 # ======================
 # Experiment Information
 # ======================
+with open("texts/0_experiment_info.txt", "r") as file:
+    experiment_info_text = file.read()
+
 experiment_info = visual.TextStim(
     win,
-    text="Welcome to the experiment!\n\nIn this study, you will be comparing images to assess their similarity to a reference image. "
-         "The results of this study will help us better understand how humans make visual judgments.\n\n"
-         "Press SPACE to continue.",
+    text=experiment_info_text,
     height=24, wrapWidth=800, color='black', pos=(0, 0)
 )
 experiment_info.draw()
@@ -40,13 +40,15 @@ event.waitKeys(keyList=['space'])
 # ======================
 # Informed Consent
 # ======================
-consent_message = visual.TextStim(
+with open("texts/1_informed_consent.txt", "r") as file:
+    informed_consent_text = file.read()
+
+informed_consent = visual.TextStim(
     win,
-    text="Informed Consent\n\nBy participating in this experiment, you agree that your responses will be anonymized and used for research purposes. "
-         "You may withdraw from the study at any time by pressing ESCAPE.\n\nIf you agree to participate, press SPACE to continue.",
+    text=informed_consent_text,
     height=24, wrapWidth=800, color='black', pos=(0, 0)
 )
-consent_message.draw()
+informed_consent.draw()
 win.flip()
 consent_key = event.waitKeys(keyList=['space', 'escape'])
 
@@ -57,7 +59,10 @@ if 'escape' in consent_key:
 # ======================
 # Participant ID
 # ======================
-participant_id = get_participant_id(win)
+with open("texts/2_participant_id.txt", "r") as file:
+    participant_id_text = file.read()
+
+participant_id = get_participant_id(win, participant_id_text)
 
 # ======================
 # Data Handling
@@ -68,76 +73,86 @@ data_file, writer = setup_data_file(participant_id)
 # Stimuli Setup
 # ======================
 # Practice stimuli
-practice_comparison_files = load_stimuli('images_practice/comparison')
+practice_comparison_files = load_stimuli('images/practice/comparison')
 practice_trial_list = setup_stimuli(practice_comparison_files, 1)  # 1 repeat for practice
 
 # Main stimuli
-comparison_files = load_stimuli('images/comparison')
+comparison_files = load_stimuli('images/trials/comparison')
 trial_list = setup_stimuli(comparison_files, pair_repeats)
 
 # ======================
-# Instructions Screen
+# Pre-instructions Screen
 # ======================
-instructions = visual.TextStim(
-    win, 
-    text="On each trial, you will see a reference image at the top and two images below. "
-         "You will make judgements on SIMILARITY."
-         "\n\nPress the LEFT arrow if the left image is more similar to the reference, or "
-         "RIGHT arrow if the right image is more similar. "
-         f"\n\n\Please keep in mind that you have {skip_time_limit} seconds to press a key for your response. "
-         "Therefore, you must be fast. "
-         "\n\nPress SPACE to begin.",
-    height=24, wrapWidth=800, color='black', pos=(0, 0)
-)
-instructions.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+with open("texts/3_pre_instructions.txt", "r") as file:
+    pre_instructions_text = file.read()
 
-# ======================
-# Practice Round
-# ======================
-practice_message = visual.TextStim(
+pre_instructions = visual.TextStim(
     win,
-    text="We will now have a practice round. "
-    "Use this time to familiarize yourself with the task."
-    "\n\nPress SPACE to begin.",
+    text=pre_instructions_text,
     height=24, wrapWidth=800, color='black', pos=(0, 0)
 )
-practice_message.draw()
+pre_instructions.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
+# ======================
+# Instructions: Practice Rounds
+# ======================
+with open("texts/4_practice_instructions.txt", "r") as file:
+    practice_instructions_text = file.read()
+
+practice_instructions = visual.TextStim(
+    win,
+    text=practice_instructions_text,
+    height=24, wrapWidth=800, color='black', pos=(0, 0)
+)
+practice_instructions.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
+
+# ======================
+# Practice Rounds
+# ======================
 run_practice(win, practice_trial_list, skip_time_limit)
 
+# ======================
+# Instructions: Similarity Trials
+# ======================
+with open("texts/5_trial_instructions_sim.txt", "r") as file:
+    trial_instructions_sim_text = file.read()
+
+trial_instructions_sim = visual.TextStim(
+    win,
+    text=trial_instructions_sim_text,
+    height=24, wrapWidth=800, color='black', pos=(0, 0)
+)
+trial_instructions_sim.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Main Trial Loop: Similarity
 # ======================
-similarity_message = visual.TextStim(
+run_similarity_trials(win, trial_list, writer, skip_time_limit, adaptive_mode)
+
+# ======================
+# Instructions: Liking Trials
+# ======================
+with open("texts/6_trial_instructions_liking.txt", "r") as file:
+    trial_instructions_liking_text = file.read()
+
+trial_instructions_liking = visual.TextStim(
     win,
-    text="Now you will have the real trials to judge similarity. "
-    "\n\nPress SPACE to begin.",
+    text=trial_instructions_liking_text,
     height=24, wrapWidth=800, color='black', pos=(0, 0)
 )
-similarity_message.draw()
+trial_instructions_liking.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
-
-run_similarity_trials(win, trial_list, writer, skip_time_limit, adaptive_mode)
 
 # ======================
 # Main Trial Loop: Liking
 # ======================
-liking_message = visual.TextStim(
-    win,
-    text="Now you will have a second round of trials where you will choose which image you like more. "
-    "\n\nPress SPACE to begin.",
-    height=24, wrapWidth=800, color='black', pos=(0, 0)
-)
-liking_message.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
-
 run_liking_trials(win, trial_list, participant_id, skip_time_limit)
 
 # ======================

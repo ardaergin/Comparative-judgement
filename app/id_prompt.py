@@ -1,8 +1,8 @@
 from psychopy import visual, event, core
 
-def get_participant_id(win):
+def get_participant_id(win, id_text):
     id_prompt = visual.TextStim(win, 
-        text="Please enter your Participant ID:\n\n(Type your ID and press ENTER to continue)", 
+        text=id_text, 
         color='black', height=32, wrapWidth=800, pos=(0, 50))
     id_display = visual.TextStim(win, text="", color='black', height=32, pos=(0, -50))
 
