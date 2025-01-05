@@ -1,12 +1,9 @@
-On each screen, you will see three products in a triad. The product on top of the triad is a beef steak. The pair on the bottom are plant-based steaks. 
+Thank you, the first task is finished!
 
-In the first task you will be asked to indicate which of the two plant-based steaks is more similar to the beef steak. 
+Now, we are going to show you the same plant-based steaks. Again, you will see the same beef steak on top of the triad with two plant-based steaks underneath.
 
-If the plant-based steak on the left is most similar, you press X.
-If the plant-based steak on the right is most similar, you press Y.
+This time, your task is to evaluate (dislike-like) the plant-based steaks and to indicate which of the two plant-based steaks you like most.
 
-Please focus on the task and answer as fast as you can without thinking too much. We are interested in your initial responses.
+If you like the plant-based steak on the left most, you press D.
 
-Before the main task begins, you will do a couple of practice rounds to get comfortable with the task.
-
-Please click on the arrow to start the practice trials.
+If you like the plant-based steak on the right most, you press K.

@@ -3,7 +3,7 @@ import os
 from app.id_prompt import get_participant_id
 from app.stimuli import load_stimuli, setup_stimuli
 from app.data_handler import setup_data_file
-from app.trial_similarity import run_similarity_trials, run_practice
+from app.trial_similarity import run_trials
 from app.trials_liking import run_liking_trials
 from app.demographics import collect_demographics
 
@@ -113,7 +113,14 @@ event.waitKeys(keyList=['space'])
 # ======================
 # Practice Rounds
 # ======================
-run_practice(win, practice_trial_list, skip_time_limit)
+run_trials(
+    win, 
+    trial_list=practice_trial_list, 
+    prompt_text="Which product on the bottom is more similar to the product on top?\n(left = D, right = K)",
+    image_folder="images/practice/comparison", 
+    reference_image_path="images/practice/reference/ref_image.jpg", 
+    skip_time_limit=skip_time_limit
+)
 
 # ======================
 # Instructions: Similarity Trials
@@ -133,7 +140,16 @@ event.waitKeys(keyList=['space'])
 # ======================
 # Main Trial Loop: Similarity
 # ======================
-run_similarity_trials(win, trial_list, writer, skip_time_limit, adaptive_mode)
+run_trials(
+    win, 
+    trial_list=trial_list, 
+    writer=writer, 
+    prompt_text="Which plant-based steak is more similar to the beef steak?\n(left = D, right = K)?",
+    image_folder="images/trials/comparison", 
+    reference_image_path="images/trials/reference/ref_image.png", 
+    skip_time_limit=skip_time_limit, 
+    adaptive_mode=adaptive_mode
+)
 
 # ======================
 # Instructions: Liking Trials
@@ -146,6 +162,7 @@ trial_instructions_liking = visual.TextStim(
     text=trial_instructions_liking_text,
     height=24, wrapWidth=800, color='black', pos=(0, 0)
 )
+
 trial_instructions_liking.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
@@ -153,21 +170,36 @@ event.waitKeys(keyList=['space'])
 # ======================
 # Main Trial Loop: Liking
 # ======================
-run_liking_trials(win, trial_list, participant_id, skip_time_limit)
+# run_liking_trials(win, trial_list, participant_id, skip_time_limit)
+run_trials(
+    win, 
+    trial_list=trial_list, 
+    writer=writer, 
+    prompt_text="Which of the two plant-based steak do you like most?\n(left = D, right = K)?",
+    image_folder="images/trials/comparison", 
+    reference_image_path=None,  # No reference image for liking trials
+    skip_time_limit=skip_time_limit
+)
+
+# ======================
+# Pre-demographics
+# ======================
+with open("texts/7_pre_demographics.txt", "r") as file:
+    pre_demographics_text = file.read()
+
+pre_demographics = visual.TextStim(
+    win,
+    text=pre_demographics_text,
+    height=24, wrapWidth=800, color='black', pos=(0, 0)
+)
+
+pre_demographics.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Demographic Questions
 # ======================
-liking_message = visual.TextStim(
-    win,
-    text="Finally, we would like you to answer some basic questions about yourself. "
-    "\n\nPress SPACE to continue.",
-    height=24, wrapWidth=800, color='black', pos=(0, 0)
-)
-liking_message.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
-
 collect_demographics(win, participant_id)
 
 # ======================
