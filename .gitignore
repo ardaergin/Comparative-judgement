@@ -3,4 +3,5 @@
 /.venv
 *.pyc
 /data
+/images
 /literature
