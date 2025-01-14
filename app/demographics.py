@@ -1,9 +1,10 @@
-from psychopy import visual, event, core
+from psychopy import visual, core
 import csv
+from app.utils import multiple_choice_prompt, free_text_prompt
 
 def collect_demographics(win, participant_id):
     """
-    Collect demographic data: gender, age, and nationality.
+    Collect demographic data using multiple-choice questions and free text input.
 
     Parameters:
     - win: PsychoPy Window object
@@ -15,99 +16,57 @@ def collect_demographics(win, participant_id):
     demographics = {}
 
     # Gender
-    gender_prompt = visual.TextStim(
-        win,
-        text="What is your gender?\n\nType your response and press ENTER (e.g., Male, Female, Non-binary, Prefer not to say).",
-        height=24, wrapWidth=800, color='black', pos=(0, 50)
-    )
-    gender_response = visual.TextStim(win, text="", height=24, color='black', pos=(0, -50))
-
-    demographics['gender'] = ""
-    while True:
-        gender_prompt.draw()
-        gender_response.setText(demographics['gender'])  # Show current input
-        gender_response.draw()
-        win.flip()
-
-        keys = event.waitKeys()
-        for key in keys:
-            if key == 'return' and demographics['gender']:  # Ensure non-empty input
-                break
-            elif key == 'backspace':  # Remove last character
-                demographics['gender'] = demographics['gender'][:-1]
-            elif key in ['escape']:  # Exit if needed
-                win.close()
-                core.quit()
-            else:
-                demographics['gender'] += key
-
-        if 'return' in keys and demographics['gender']:
-            break
+    gender_question = "What is your gender?"
+    gender_options = ["Male", "Female", "Non-binary", "Prefer not to say"]
+    demographics['gender'] = multiple_choice_prompt(win, gender_question, gender_options)
 
     # Age
-    age_prompt = visual.TextStim(
-        win,
-        text="What is your age?\n\nType your response and press ENTER.",
-        height=24, wrapWidth=800, color='black', pos=(0, 50)
-    )
-    age_response = visual.TextStim(win, text="", height=24, color='black', pos=(0, -50))
+    def validate_age(input_text):
+        try:
+            age = int(input_text)
+            return 16 <= age <= 99
+        except ValueError:
+            return False
 
-    demographics['age'] = ""
-    while True:
-        age_prompt.draw()
-        age_response.setText(demographics['age'])  # Show current input
-        age_response.draw()
-        win.flip()
-
-        keys = event.waitKeys()
-        for key in keys:
-            if key == 'return' and demographics['age']:  # Ensure non-empty input
-                break
-            elif key == 'backspace':  # Remove last character
-                demographics['age'] = demographics['age'][:-1]
-            elif key in ['escape']:  # Exit if needed
-                win.close()
-                core.quit()
-            elif key.isdigit():  # Ensure only numeric input
-                demographics['age'] += key
-
-        if 'return' in keys and demographics['age']:
-            break
+    age_question = "What is your age? (Please enter a number between 16 and 99)"
+    demographics['age'] = free_text_prompt(win, age_question, validation_func=validate_age)
 
     # Nationality
-    nationality_prompt = visual.TextStim(
-        win,
-        text="What is your nationality?\n\nType your response and press ENTER.",
-        height=24, wrapWidth=800, color='black', pos=(0, 50)
-    )
-    nationality_response = visual.TextStim(win, text="", height=24, color='black', pos=(0, -50))
+    nationality_question = "What is your nationality?"
+    demographics['nationality'] = free_text_prompt(win, nationality_question, validation_func=None)
 
-    demographics['nationality'] = ""
-    while True:
-        nationality_prompt.draw()
-        nationality_response.setText(demographics['nationality'])  # Show current input
-        nationality_response.draw()
-        win.flip()
+    # Dietary preference
+    dietary_question = "How would you describe your diet?"
+    dietary_options = [
+        "Omnivore (I eat animal products)",
+        "Vegetarian",
+        "Vegan",
+        "Pescatarian",
+        "Other"
+    ]
+    demographics['diet'] = multiple_choice_prompt(win, dietary_question, dietary_options)
 
-        keys = event.waitKeys()
-        for key in keys:
-            if key == 'return' and demographics['nationality']:  # Ensure non-empty input
-                break
-            elif key == 'backspace':  # Remove last character
-                demographics['nationality'] = demographics['nationality'][:-1]
-            elif key in ['escape']:  # Exit if needed
-                win.close()
-                core.quit()
-            else:
-                demographics['nationality'] += key
-
-        if 'return' in keys and demographics['nationality']:
-            break
+    # Frequency of plant-based meat alternative purchase
+    purchase_frequency_question = ("How often do you purchase plant-based meat alternatives?")
+    purchase_frequency_options = [
+        "Less than once a month",
+        "At least once a month, but less than once a week",
+        "Once or twice a week",
+        "More than twice a week, but less than everyday",
+        "At least once a day"
+    ]
+    demographics['purchase_frequency'] = multiple_choice_prompt(win, purchase_frequency_question, purchase_frequency_options)
 
     # Save Demographic Data
     with open(f"data/{participant_id}_demographics.csv", 'w', newline='') as demo_file:
         demo_writer = csv.writer(demo_file)
-        demo_writer.writerow(['Gender', 'Age', 'Nationality'])
-        demo_writer.writerow([demographics['gender'], demographics['age'], demographics['nationality']])
+        demo_writer.writerow(['Gender', 'Age', 'Nationality', 'Diet', 'Purchase Frequency'])
+        demo_writer.writerow([
+            demographics['gender'],
+            demographics['age'],
+            demographics['nationality'],
+            demographics['diet'],
+            demographics['purchase_frequency']
+        ])
 
     return demographics
