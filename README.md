@@ -28,6 +28,39 @@ pip install -r requirements.txt
 
 > **Note:** While you can copy and paste all commands at once, it is recommended to run them line by line to check for any errors.
 
+Once these installations are done, you must create an `images` folder under the `Comparative-judgement` folder yourself with the following structure (and you must put the images used in the study in these folders yourself):
+
+```
+images/
+├── practice/
+│   ├── comparison/
+│   │   ├── image1.jpg
+│   │   ├── image2.jpg
+│   │   ├── image3.jpg
+│   │   └── ...
+│   └── reference/
+│       └── ref_image.jpg
+├── trials/
+│   ├── comparison/
+│   │   ├── image1.jpg
+│   │   ├── image2.jpg
+│   │   ├── image3.jpg
+│   │   └── ...
+│   └── reference/
+│       └── ref_image.jpg
+```
+
+**`images/`**: Root folder for all images used in the experiment.
+  - **`practice/`**: Folder for practice-related images.
+    - **`comparison/`**: Must contain multiple images used as comparison stimuli for practice trials.
+    - **`reference/`**: Must contain exactly one image used as the reference for practice trials.
+  - **`trials/`**: Folder for main trial-related images.
+    - **`comparison/`**: Must contain multiple images used as comparison stimuli for main trials.
+    - **`reference/`**: Must contain exactly one image used as the reference for main trials.
+
+> **Important Note**: The program will load and process images based on their folder location, not based on their name. Hence, the image names can be anything you want, but the folder names must follow the structure described above.
+
+
 ## Installation for the Lab
 
 1. **Install Git**:
