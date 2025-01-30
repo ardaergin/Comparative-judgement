@@ -44,7 +44,7 @@ def collect_feedback(win, participant_id):
     # Create "Next" button
     next_button = visual.TextStim(
         win,
-        text="Next",
+        text="Finish",
         height=24,
         color='black',
         pos=(0, -200)
