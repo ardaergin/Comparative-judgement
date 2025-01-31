@@ -16,7 +16,7 @@ def collect_demographics(win, participant_id):
     demographics = {}
 
     # Gender
-    gender_question = "What is your gender?\n(Please press the number on the left keyboard corresponding to your chosen options. Do not use the keyboard on the right.)"
+    gender_question = "What is your gender?\n(Please press the number on the left keyboard corresponding to your chosen options. Do not use the keyboard on the right.)\n "
     gender_options = ["Male", "Female", "Non-binary", "Prefer not to say"]
     demographics['gender'] = multiple_choice_prompt(win, gender_question, gender_options)
 
