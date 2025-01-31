@@ -12,10 +12,6 @@ from app.feedback import *
 # Parameters
 # ======================
 
-# Converting the instructions to images before the start of the experiment
-from app.pdf_to_image import convert_pdf_to_images
-convert_pdf_to_images("instructions.pdf", output_format="png", dpi=900)
-
 ## Experiment parameters
 pair_repeats = 1
 skip_time_limit = 4
