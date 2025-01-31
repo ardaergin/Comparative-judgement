@@ -10,13 +10,15 @@ def run_trials(
     skip_time_limit=4, 
     prompt_text="Which is more similar to the reference image?\n(left = D, right = K)", 
     image_folder="images/trials/comparison", 
-    comparison_images=None,  # Preloaded comparison images
-    reference_image=None,    # Preloaded reference image
+    comparison_images=None,  
+    reference_image=None,    
     adaptive_mode=False,
-    round_type="unknown"
+    round_type="unknown",
+    num_breaks=0,           
+    break_wait_time=20      # <-- NEW: how many seconds to wait before letting them press space
 ):
     """
-    General function to run trials.
+    General function to run trials, with optional breaks that display block info.
 
     Parameters:
         win: PsychoPy Window object.
@@ -29,7 +31,10 @@ def run_trials(
         reference_image: Preloaded reference ImageStim object.
         adaptive_mode: Boolean for adaptive judgment mode.
         round_type: String specifying the type of the round (e.g., "practice", "similarity", "liking").
+        num_breaks: Integer, how many breaks to give during this block of trials (0 = no breaks).
+        break_wait_time: How many seconds to wait on the break screen before continuing.
     """
+
     # Use preloaded reference image
     reference_stim = reference_image
 
@@ -39,7 +44,9 @@ def run_trials(
     # Missed trial message
     missed_message = visual.TextStim(
         win,
-        text="You missed the last trial.\nPlease respond faster.\n\nRemember we are interested in your initial impressions.\n\nPress the SPACE BAR to continue.",
+        text="You missed the last trial.\nPlease respond faster.\n\n"
+             "We are interested in your initial impressions.\n\n"
+             "Press the SPACE BAR to continue.",
         color='black',
         height=24,
         wrapWidth=800,
@@ -48,34 +55,44 @@ def run_trials(
 
     clock = core.Clock()
 
-    # Initialize adaptive judgment system if needed
+    # Adaptive mode initialization
     acj = ACJ([item for pair in trial_list for item in pair]) if adaptive_mode else None
 
-    for trial_num in range(1, len(trial_list) + 1):
-        # Select pair
+    # Number of trials and number of blocks
+    n_trials = len(trial_list)
+    n_blocks = num_breaks + 1  # e.g. 2 breaks -> 3 blocks
+
+    # If num_breaks=0, effectively no intermediate breaks
+    if n_blocks > 1:
+        block_size = n_trials // n_blocks  # integer division
+    else:
+        block_size = n_trials
+
+    for trial_index, (pair_left, pair_right) in enumerate(trial_list):
+        trial_num = trial_index + 1
+
+        # If using adaptive mode, select pair from the algorithm
         if adaptive_mode:
-            left_image_name, right_image_name = acj.select_pair()
-        else:
-            left_image_name, right_image_name = trial_list[trial_num - 1]
+            pair_left, pair_right = acj.select_pair()
 
-        # Randomize the order of the images
-        if random.choice([True, False]):  # 50% chance to swap
-            left_image_name, right_image_name = right_image_name, left_image_name
+        # Random 50% swap
+        if random.choice([True, False]):
+            pair_left, pair_right = pair_right, pair_left
 
-        # Show fixation point
+        # Show fixation
         fixation.draw()
         win.flip()
         core.wait(0.5)
 
-        # Use preloaded comparison images
-        left_stim = comparison_images[left_image_name]
-        right_stim = comparison_images[right_image_name]
+        # Grab preloaded images
+        left_stim = comparison_images[pair_left]
+        right_stim = comparison_images[pair_right]
 
-        # Update their positions for the trial
+        # Positions
         left_stim.pos = (-250, -150)
         right_stim.pos = (250, -150)
 
-        # Create prompt above the images
+        # Prompt
         prompt = visual.TextStim(
             win,
             text=prompt_text,
@@ -94,19 +111,24 @@ def run_trials(
 
         # Collect response
         clock.reset()
-        keys = event.waitKeys(keyList=['d', 'k', 'escape'], timeStamped=clock, maxWait=skip_time_limit)
+        keys = event.waitKeys(
+            keyList=['d', 'k', 'escape'],
+            timeStamped=clock,
+            maxWait=skip_time_limit
+        )
 
         if keys:
             key, rt = keys[0]
             if key == 'escape':
                 break  # Allow experimenter to quit
             else:
-                winner = left_image_name if key == 'd' else right_image_name
+                winner = pair_left if key == 'd' else pair_right
 
-                if writer:  # Only write to file if writer is provided
-                    writer.writerow([trial_num, round_type, left_image_name, right_image_name, key, rt])
+                # Save data if writer is provided
+                if writer:
+                    writer.writerow([trial_num, round_type, pair_left, pair_right, key, rt])
 
-                # Highlight chosen image with a red border
+                # Highlight chosen image
                 chosen_stim = left_stim if key == 'd' else right_stim
                 red_border = visual.Rect(
                     win,
@@ -117,25 +139,56 @@ def run_trials(
                     pos=chosen_stim.pos
                 )
 
-                # Draw feedback
+                # Feedback for 0.5s
                 prompt.draw()
                 if reference_stim:
                     reference_stim.draw()
                 left_stim.draw()
                 right_stim.draw()
-                red_border.draw()  # Draw the red border
+                red_border.draw()
                 win.flip()
-                core.wait(0.5)  # Show feedback for 0.5 seconds
+                core.wait(0.5)
 
+                # Update adaptive model
                 if adaptive_mode:
-                    acj.record_comparison(left_image_name, right_image_name, winner)
+                    acj.record_comparison(pair_left, pair_right, winner)
                     acj.update_parameters()
         else:
-            # Trial was skipped
+            # Missed trial
             missed_message.draw()
             win.flip()
-            # Wait for space bar to continue
             event.waitKeys(keyList=['space'])
             if writer:
-                writer.writerow([trial_num, round_type, left_image_name, right_image_name, "missing", "N/A"])
-            continue
+                writer.writerow([trial_num, round_type, pair_left, pair_right, "missing", "N/A"])
+
+        # ---- NEW/UPDATED: Show break screen if needed ----
+        # We'll show a break after every 'block_size' trials, except for the last block
+        if n_blocks > 1:  # Only if we actually have breaks
+            # Check if we completed a block boundary
+            if (trial_num % block_size == 0) and (trial_num < n_trials):
+                # We have completed block # = trial_num//block_size
+                current_block = trial_num // block_size
+                # NOTE: The last block is block index = n_blocks, we skip break if current_block == n_blocks.
+                if current_block < n_blocks:  
+                    # e.g., "Block 1 / 3 is done. Please take a ~20s break..."
+                    break_text = (f"Block {current_block} of {n_blocks} completed.\n\n"
+                                  f"Please take a short break (~{break_wait_time} s).\n"
+                                  "Press SPACE when you are ready to continue.")
+                    break_stim = visual.TextStim(
+                        win, 
+                        text=break_text,
+                        color='black',
+                        height=24,
+                        wrapWidth=800,
+                        pos=(0, 0)
+                    )
+                    break_stim.draw()
+                    win.flip()
+                    
+                    # Wait the specified break time (optional)
+                    core.wait(break_wait_time)
+                    
+                    # Then wait for SPACE
+                    event.waitKeys(keyList=['space'])
+
+    # End of function

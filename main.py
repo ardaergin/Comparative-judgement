@@ -148,7 +148,9 @@ run_trials(
     comparison_images=practice_preloaded_images,
     reference_image=practice_reference_image,
     skip_time_limit=skip_time_limit, 
-    round_type="practice"
+    round_type="practice",
+    adaptive_mode=adaptive_mode, 
+    num_breaks=0
 )
 
 
@@ -182,8 +184,11 @@ run_trials(
     reference_image=main_reference_image,
     skip_time_limit=skip_time_limit, 
     adaptive_mode=adaptive_mode, 
-    round_type="similarity"
+    round_type="similarity",
+    num_breaks=3,
+    break_wait_time=20
 )
+
 
 # ======================
 # Instructions: Liking Trials
@@ -216,8 +221,11 @@ run_trials(
     reference_image=main_reference_image,
     skip_time_limit=skip_time_limit, 
     adaptive_mode=adaptive_mode, 
-    round_type="liking"
+    round_type="liking",
+    num_breaks=3,
+    break_wait_time=20
 )
+
 
 # ======================
 # Pre-demographics
