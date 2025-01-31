@@ -16,8 +16,7 @@ def collect_demographics(win, participant_id):
     demographics = {}
 
     # Gender
-    gender_question = "What is your gender? 
-(Please press the number on the left keyboard corresponding to your chosen options. Do not use the keyboard on the right.)"
+    gender_question = "What is your gender?\n(Please press the number on the left keyboard corresponding to your chosen options. Do not use the keyboard on the right.)"
     gender_options = ["Male", "Female", "Non-binary", "Prefer not to say"]
     demographics['gender'] = multiple_choice_prompt(win, gender_question, gender_options)
 
@@ -29,7 +28,7 @@ def collect_demographics(win, participant_id):
         except ValueError:
             return False
 
-    age_question = "What is your age? (Please enter a number between 16 and 99)"
+    age_question = "What is your age?(Please enter a number between 16 and 99)"
     demographics['age'] = free_text_prompt(win, age_question, validation_func=validate_age)
 
     # Nationality
@@ -37,8 +36,7 @@ def collect_demographics(win, participant_id):
     demographics['nationality'] = free_text_prompt(win, nationality_question, validation_func=None)
 
     # Dietary preference
-    dietary_question = "How would you describe your diet? 
-(Please press the number on the left keyboard corresponding your chosen option. Do not use the keyboard on the right.)"
+    dietary_question = "How would you describe your diet?\n(Please press the number on the left keyboard corresponding your chosen option. Do not use the keyboard on the right.)"
     dietary_options = [
         "Omnivore (I eat animal products)",
         "Vegetarian",
@@ -49,7 +47,7 @@ def collect_demographics(win, participant_id):
     demographics['diet'] = multiple_choice_prompt(win, dietary_question, dietary_options)
 
     # Frequency of plant-based meat alternative eating
-    eat_frequency_question = "How often do you eat plant-based meat alternatives? (Please press the number on the left keyboard corresponding to your chosen option. Do not use the keyboard on the right.)"
+    eat_frequency_question = "How often do you eat plant-based meat alternatives?\n(Please press the number on the left keyboard corresponding to your chosen option. Do not use the keyboard on the right.)"
     eat_frequency_options = [
         "Never",
         "Once every three months",
