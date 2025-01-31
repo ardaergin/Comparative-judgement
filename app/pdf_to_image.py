@@ -1,6 +1,6 @@
 import fitz  # PyMuPDF
 
-def pdf_to_images(pdf_path, output_format="png", dpi=300):
+def convert_pdf_to_images(pdf_path, output_format="png", dpi=300):
     doc = fitz.open(pdf_path)
     zoom = dpi / 72  # Converting DPI to scaling factor (default PDF DPI is 72)
     matrix = fitz.Matrix(zoom, zoom)
@@ -14,12 +14,16 @@ def pdf_to_images(pdf_path, output_format="png", dpi=300):
         if page_num == 1:
             output = f"texts/4_practice_instructions.{output_format}"
         if page_num == 2:
-            output = f"texts/5_trial_instructions_sim.{output_format}"
+            output = f"texts/4_practice_instructions_visual.{output_format}"
         if page_num == 3:
+            output = f"texts/5_trial_instructions_sim.{output_format}"
+        if page_num == 4:
+            output = f"texts/5_trial_instructions_sim_visual.{output_format}"
+        if page_num == 5:
             output = f"texts/6_trial_instructions_liking.{output_format}"
+        if page_num == 6:
+            output = f"texts/6_trial_instructions_liking_visual.{output_format}"
         pix.save(output)
         print(f"Saved: {output}")
     
     doc.close()
-
-pdf_to_images("instructions.pdf", output_format="png", dpi=600)

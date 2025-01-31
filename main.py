@@ -12,6 +12,10 @@ from app.feedback import *
 # Parameters
 # ======================
 
+# Converting the instructions to images before the start of the experiment
+from app.pdf_to_image import convert_pdf_to_images
+convert_pdf_to_images("instructions.pdf", output_format="png", dpi=900)
+
 ## Experiment parameters
 pair_repeats = 1
 skip_time_limit = 4
@@ -136,6 +140,10 @@ practice_instructions.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
+practice_instructions = create_scaled_image(win, "texts/4_practice_instructions_visual.png")
+practice_instructions.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Practice Rounds
@@ -144,7 +152,7 @@ run_trials(
     win, 
     trial_list=practice_trial_list, 
     writer=writer, 
-    prompt_text="Which product on the bottom is more similar to the product on top?\n(left = D, right = K)",
+    prompt_text="Which of the products on the bottom is more similar to the product on top?\n(left = D, right = K)",
     comparison_images=practice_preloaded_images,
     reference_image=practice_reference_image,
     skip_time_limit=skip_time_limit, 
@@ -171,6 +179,11 @@ trial_instructions_sim.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
+trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
+trial_instructions_sim.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
+
 
 # ======================
 # Main Trial Loop: Similarity
@@ -179,7 +192,7 @@ run_trials(
     win, 
     trial_list=trial_list, 
     writer=writer, 
-    prompt_text="Which plant-based steak is more similar to the beef steak?\n(left = D, right = K)?",
+    prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?\n(left = D, right = K)?",
     comparison_images=trial_preloaded_images,
     reference_image=main_reference_image,
     skip_time_limit=skip_time_limit, 
@@ -207,6 +220,10 @@ trial_instructions_liking.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
+trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
+trial_instructions_liking.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Main Trial Loop: Liking
@@ -216,9 +233,9 @@ run_trials(
     win, 
     trial_list=trial_list, 
     writer=writer, 
-    prompt_text="Which of the two plant-based steak do you like most?\n(left = D, right = K)?",
+    prompt_text="Which of the two plant-based steaks do you like more?\n(left = D, right = K)?",
     comparison_images=trial_preloaded_images,
-    reference_image=main_reference_image,
+    reference_image=None, # or main_reference_image
     skip_time_limit=skip_time_limit, 
     adaptive_mode=adaptive_mode, 
     round_type="liking",

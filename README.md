@@ -108,7 +108,9 @@ To update the local copy of the repository in the lab with the latest changes fr
 
 1. Navigate to the repository folder in Git Bash:
    ```bash
-   cd /z/11-cubicle/Comparative-judgement
+   cd Z:
+   cd 11-cubicle
+   cd Comparative-judgement
    ```
 
 2. Run the following command:
