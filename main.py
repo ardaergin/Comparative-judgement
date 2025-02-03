@@ -15,7 +15,6 @@ from app.feedback import *
 ## Experiment parameters
 pair_repeats = 1
 skip_time_limit = 4
-adaptive_mode = False
 
 ## Visual parameters
 experiment_font = "Times New Roman"
@@ -152,7 +151,6 @@ run_trials(
     reference_image=practice_reference_image,
     skip_time_limit=skip_time_limit, 
     round_type="practice",
-    adaptive_mode=adaptive_mode, 
     num_breaks=0
 )
 
@@ -205,7 +203,6 @@ run_trials(
     comparison_images=trial_preloaded_images,
     reference_image=main_reference_image,
     skip_time_limit=skip_time_limit, 
-    adaptive_mode=adaptive_mode, 
     round_type="similarity",
     num_breaks=3,
     break_wait_time=20
@@ -246,7 +243,6 @@ run_trials(
     comparison_images=trial_preloaded_images,
     reference_image=None, # or main_reference_image
     skip_time_limit=skip_time_limit, 
-    adaptive_mode=adaptive_mode, 
     round_type="liking",
     num_breaks=3,
     break_wait_time=20
