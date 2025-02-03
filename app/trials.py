@@ -89,8 +89,12 @@ def run_trials(
         right_stim = comparison_images[pair_right]
 
         # Positions
-        left_stim.pos = (-250, -150)
-        right_stim.pos = (250, -150)
+        if round_type == "liking":
+            left_stim.pos = (-250, 0)
+            right_stim.pos = (250, 0)
+        else:
+            left_stim.pos = (-250, -150)
+            right_stim.pos = (250, -150)
 
         # Prompt
         prompt = visual.TextStim(
@@ -103,7 +107,7 @@ def run_trials(
 
         # Draw stimuli
         prompt.draw()
-        if reference_stim:
+        if reference_stim and round_type != "liking":
             reference_stim.draw()
         left_stim.draw()
         right_stim.draw()
@@ -130,7 +134,7 @@ def run_trials(
 
                 # Highlight chosen image
                 chosen_stim = left_stim if key == 'd' else right_stim
-                red_border = visual.Rect(
+                blue_border = visual.Rect(
                     win,
                     width=chosen_stim.size[0] + 10,
                     height=chosen_stim.size[1] + 10,
@@ -145,7 +149,7 @@ def run_trials(
                     reference_stim.draw()
                 left_stim.draw()
                 right_stim.draw()
-                red_border.draw()
+                blue_border.draw()
                 win.flip()
                 core.wait(0.5)
 
