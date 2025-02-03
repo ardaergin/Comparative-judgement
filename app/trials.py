@@ -1,6 +1,4 @@
 from psychopy import visual, core, event
-import os
-from app.adaptive_algorithm import ACJ
 import random
 
 def run_trials(
@@ -9,10 +7,8 @@ def run_trials(
     writer=None, 
     skip_time_limit=4, 
     prompt_text="Which is more similar to the reference image?\n(left = D, right = K)", 
-    image_folder="images/trials/comparison", 
     comparison_images=None,  
     reference_image=None,    
-    adaptive_mode=False,
     round_type="unknown",
     num_breaks=0,           
     break_wait_time=20      # <-- NEW: how many seconds to wait before letting them press space
@@ -29,7 +25,6 @@ def run_trials(
         image_folder: Path to the folder containing comparison images.
         comparison_images: Dictionary of preloaded comparison ImageStim objects.
         reference_image: Preloaded reference ImageStim object.
-        adaptive_mode: Boolean for adaptive judgment mode.
         round_type: String specifying the type of the round (e.g., "practice", "similarity", "liking").
         num_breaks: Integer, how many breaks to give during this block of trials (0 = no breaks).
         break_wait_time: How many seconds to wait on the break screen before continuing.
@@ -55,9 +50,6 @@ def run_trials(
 
     clock = core.Clock()
 
-    # Adaptive mode initialization
-    acj = ACJ([item for pair in trial_list for item in pair]) if adaptive_mode else None
-
     # Number of trials and number of blocks
     n_trials = len(trial_list)
     n_blocks = num_breaks + 1  # e.g. 2 breaks -> 3 blocks
@@ -70,10 +62,6 @@ def run_trials(
 
     for trial_index, (pair_left, pair_right) in enumerate(trial_list):
         trial_num = trial_index + 1
-
-        # If using adaptive mode, select pair from the algorithm
-        if adaptive_mode:
-            pair_left, pair_right = acj.select_pair()
 
         # Random 50% swap
         if random.choice([True, False]):
@@ -153,10 +141,6 @@ def run_trials(
                 win.flip()
                 core.wait(0.5)
 
-                # Update adaptive model
-                if adaptive_mode:
-                    acj.record_comparison(pair_left, pair_right, winner)
-                    acj.update_parameters()
         else:
             # Missed trial
             missed_message.draw()
