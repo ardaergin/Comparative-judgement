@@ -134,7 +134,7 @@ def run_trials(
                     win,
                     width=chosen_stim.size[0] + 10,
                     height=chosen_stim.size[1] + 10,
-                    lineColor='red',
+                    lineColor='blue',
                     lineWidth=5,
                     pos=chosen_stim.pos
                 )
