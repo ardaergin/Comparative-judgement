@@ -1,6 +1,7 @@
 from psychopy import visual, core
 from datetime import datetime
 from app.utils import free_text_prompt
+import string
 
 def get_participant_id(win, id_text, experiment_font):
     """
@@ -15,8 +16,8 @@ def get_participant_id(win, id_text, experiment_font):
         A unique participant ID with a timestamp, e.g., "participant1234_20250113_142530".
     """
     def validate_id(input_text):
-        return len(input_text) > 0  # Ensure non-empty input
+        return len(input_text) == 5 and input_text.isdigit()
 
-    participant_id = free_text_prompt(win, id_text, validation_func=validate_id)
+    participant_id = free_text_prompt(win, id_text, validation_func=validate_id, allowed_chars=string.digits, max_length=5)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     return f"{participant_id}_{timestamp}"

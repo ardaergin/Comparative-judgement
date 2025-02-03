@@ -1,6 +1,8 @@
 from psychopy import visual, core
 import csv
 from app.utils import multiple_choice_prompt, free_text_prompt
+import string
+from app.helper.nationality_list import country_adjectivals
 
 def collect_demographics(win, participant_id):
     """
@@ -29,11 +31,20 @@ def collect_demographics(win, participant_id):
             return False
 
     age_question = "What is your age?\n(Please enter a number between 16 and 99 and press ENTER)"
-    demographics['age'] = free_text_prompt(win, age_question, validation_func=validate_age)
+    demographics['age'] = free_text_prompt(win, age_question, validation_func=validate_age, allowed_chars=string.digits, max_length=2)
 
     # Nationality
+    # Create a set of valid nationalities from the dictionary, all in lowercase
+    valid_nationalities = set()
+    for nationalities in country_adjectivals.values():
+        valid_nationalities.update(nationality.lower() for nationality in nationalities)
+
+    def validate_nationality(input_text):
+        # Convert input to lowercase and check if it is in the set of valid nationalities
+        return input_text.lower() in valid_nationalities
+
     nationality_question = "What is your nationality?\n (Please enter your nationality and press ENTER)\n "
-    demographics['nationality'] = free_text_prompt(win, nationality_question, validation_func=None)
+    demographics['nationality'] = free_text_prompt(win, nationality_question, validation_func=validate_nationality, allowed_chars=string.ascii_lowercase + " -")
 
     # Dietary preference
     dietary_question = "How would you describe your diet?\n(Please press the number on the left keyboard corresponding your chosen option. Do not use the keyboard on the right.)\n"

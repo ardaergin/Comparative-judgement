@@ -11,7 +11,8 @@ def run_trials(
     reference_image=None,    
     round_type="unknown",
     num_breaks=0,           
-    break_wait_time=20      # <-- NEW: how many seconds to wait before letting them press space
+    break_wait_time=20,      # <-- NEW: how many seconds to wait before letting them press space
+    font="Times New Roman"
 ):
     """
     General function to run trials, with optional breaks that display block info.
@@ -34,7 +35,7 @@ def run_trials(
     reference_stim = reference_image
 
     # Fixation stimulus
-    fixation = visual.TextStim(win, text="+", height=50, color='black', pos=(0, 0))
+    fixation = visual.TextStim(win, text="+", height=50, color='black', font=font, pos=(0, 0))
 
     # Missed trial message
     missed_message = visual.TextStim(
@@ -43,6 +44,7 @@ def run_trials(
              "We are interested in your initial impressions.\n\n"
              "Press the SPACE BAR to continue.",
         color='black',
+        font=font,
         height=24,
         wrapWidth=800,
         pos=(0, 0)
@@ -89,6 +91,7 @@ def run_trials(
             win,
             text=prompt_text,
             color='black',
+            font=font,
             height=24,
             pos=(0, 350)
         )
@@ -166,6 +169,7 @@ def run_trials(
                         win, 
                         text=break_text,
                         color='black',
+                        font=font,
                         height=24,
                         wrapWidth=800,
                         pos=(0, 0)
