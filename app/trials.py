@@ -12,7 +12,10 @@ def run_trials(
     round_type="unknown",
     num_breaks=0,           
     break_wait_time=20,      # <-- NEW: how many seconds to wait before letting them press space
-    font="Times New Roman"
+    font="Times New Roman",
+    left_text="Left Image",  # <-- NEW: Text for left image
+    right_text="Right Image", # <-- NEW: Text for right image
+    reference_text="Reference Image" # <-- NEW: Text for reference image
 ):
     """
     General function to run trials, with optional breaks that display block info.
@@ -80,11 +83,11 @@ def run_trials(
 
         # Positions
         if round_type == "liking":
-            left_stim.pos = (-250, 0)
-            right_stim.pos = (250, 0)
+            left_stim.pos = (-250, -50)
+            right_stim.pos = (250, -50)
         else:
-            left_stim.pos = (-250, -150)
-            right_stim.pos = (250, -150)
+            left_stim.pos = (-250, -200)
+            right_stim.pos = (250, -200)
 
         # Prompt
         prompt = visual.TextStim(
@@ -96,12 +99,50 @@ def run_trials(
             pos=(0, 350)
         )
 
+        # Text on top of images
+        if round_type == "liking":
+            left_text_pos = (-250, 120)  # Adjusted position for liking round
+            right_text_pos = (250, 120)  # Adjusted position for liking round
+        else:
+            left_text_pos = (-250, -30)  # Adjusted position for liking round
+            right_text_pos = (250, -30)  # Adjusted position for liking round
+            reference_text_pos = (0, 270)  # Adjusted position for liking round
+
+        left_text_stim = visual.TextStim(
+            win,
+            text=left_text,
+            color='black',
+            font=font,
+            height=24,
+            pos=left_text_pos
+        )
+        right_text_stim = visual.TextStim(
+            win,
+            text=right_text,
+            color='black',
+            font=font,
+            height=24,
+            pos=right_text_pos
+        )
+        if round_type != "liking":
+            reference_text_stim = visual.TextStim(
+                win,
+                text=reference_text,
+                color='black',
+                font=font,
+                height=24,
+                pos=reference_text_pos
+            )
+        
         # Draw stimuli
         prompt.draw()
         if reference_stim and round_type != "liking":
             reference_stim.draw()
+            reference_text_stim.draw()  # Draw text on top of reference
         left_stim.draw()
+        left_text_stim.draw()  # Draw text on top of left image
         right_stim.draw()
+        right_text_stim.draw()  # Draw text on top of right image
         win.flip()
 
         # Collect response

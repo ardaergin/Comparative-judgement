@@ -35,13 +35,13 @@ win = visual.Window(
 practice_comparison_files = load_stimuli('images/practice/comparison')  # Load image filenames
 practice_preloaded_images = preload_images(win, 'images/practice/comparison', practice_comparison_files)  # Preload images
 practice_trial_list = setup_stimuli(practice_comparison_files, 1)  # Generate trial list (1 repeat for practice)
-practice_reference_image = visual.ImageStim(win, image="images/practice/reference/ref_image.png", size=(300, 300), pos=(0, 150))  # Preload reference image
+practice_reference_image = visual.ImageStim(win, image="images/practice/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
 
 # Main stimuli
 comparison_files = load_stimuli('images/trials/comparison')  # Load image filenames
 trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files)  # Preload images
 trial_list = setup_stimuli(comparison_files, pair_repeats)  # Generate trial list
-main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 300), pos=(0, 150))  # Preload reference image
+main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
 
 
 # ======================
@@ -134,10 +134,10 @@ practice_instructions.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-practice_instructions = create_scaled_image(win, "texts/4_practice_instructions_visual.png")
-practice_instructions.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+# practice_instructions = create_scaled_image(win, "texts/4_practice_instructions_visual.png")
+# practice_instructions.draw()
+# win.flip()
+# event.waitKeys(keyList=['space'])
 
 # ======================
 # Practice Rounds
@@ -151,7 +151,10 @@ run_trials(
     reference_image=practice_reference_image,
     skip_time_limit=skip_time_limit, 
     round_type="practice",
-    num_breaks=0
+    num_breaks=0,
+    left_text="Citrus fruit A",
+    right_text="Citrus fruit B",
+    reference_text="Orange"
 )
 
 # Aftermath of the Practice rounds:
@@ -186,10 +189,10 @@ trial_instructions_sim.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
-trial_instructions_sim.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+# trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
+# trial_instructions_sim.draw()
+# win.flip()
+# event.waitKeys(keyList=['space'])
 
 
 # ======================
@@ -205,7 +208,10 @@ run_trials(
     skip_time_limit=skip_time_limit, 
     round_type="similarity",
     num_breaks=3,
-    break_wait_time=20
+    break_wait_time=20,
+    left_text="Plant-based Steak A",
+    right_text="Plant-based Steak B",
+    reference_text="Real Steak"
 )
 
 
@@ -226,10 +232,10 @@ trial_instructions_liking.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
-trial_instructions_liking.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+# trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
+# trial_instructions_liking.draw()
+# win.flip()
+# event.waitKeys(keyList=['space'])
 
 # ======================
 # Main Trial Loop: Liking
@@ -245,7 +251,10 @@ run_trials(
     skip_time_limit=skip_time_limit, 
     round_type="liking",
     num_breaks=3,
-    break_wait_time=20
+    break_wait_time=20,
+    left_text="Plant-based Steak A",
+    right_text="Plant-based Steak B",
+    reference_text="Real Steak"
 )
 
 
