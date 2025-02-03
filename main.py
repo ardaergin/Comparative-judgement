@@ -16,7 +16,6 @@ from app.feedback import *
 pair_repeats = 1
 skip_time_limit = 4
 adaptive_mode = False
-practice_rounds = 3
 
 ## Visual parameters
 experiment_font = "Times New Roman"
@@ -157,6 +156,20 @@ run_trials(
     num_breaks=0
 )
 
+# Aftermath of the Practice rounds:
+with open("texts/4_practice_aftermath.txt", "r") as file:
+    practice_aftermath_text = file.read()
+
+practice_aftermath = visual.TextStim(
+    win,
+    text=practice_aftermath_text,
+    height=24, wrapWidth=800, color='black', pos=(0, 0),
+    font=experiment_font,
+    alignText='left', anchorHoriz='center'
+)
+practice_aftermath.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Instructions: Similarity Trials
