@@ -22,9 +22,9 @@ experiment_font = "Times New Roman"
 ## Set up PsychoPy window
 win = visual.Window(
     fullscr=True,
-    # size=(1280, 720),
+    size=[1920, 1080],
     color=[1, 1, 1],
-    units='pix'
+    units='norm' # TODO: change this to 'norm', but I must change the other stuff
 )
 
 
