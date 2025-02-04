@@ -14,7 +14,7 @@ def collect_feedback(win, participant_id):
     instruction_text = ("This was the end of this session, thank you very much for your participation!\n\n"
                        "If you have any remarks, questions or feedback regarding this study, "
                        "please enter them below. It will be really helpful for us to know how "
-                       "you made your decisions. If not, you can just click on the 'Next' button.")
+                       "you made your decisions. If not, you can just click on the 'Finish' button.")
     
     instructions = visual.TextStim(
         win,
