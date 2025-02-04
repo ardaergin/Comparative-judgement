@@ -103,11 +103,11 @@ def run_trials(
 
         # Text on top of images
         if round_type == "liking":
-            left_text_pos = (-250, 110)  # Adjusted position for liking round
-            right_text_pos = (250, 110)  # Adjusted position for liking round
+            left_text_pos = (-250, 100)  # Adjusted position for liking round
+            right_text_pos = (250, 100)  # Adjusted position for liking round
         else:
-            left_text_pos = (-250, -40)  # Adjusted position for liking round
-            right_text_pos = (250, -40)  # Adjusted position for liking round
+            left_text_pos = (-250, -50)  # Adjusted position for liking round
+            right_text_pos = (250, -50)  # Adjusted position for liking round
             reference_text_pos = (0, 250)  # Adjusted position for liking round
 
         left_text_stim = visual.TextStim(
