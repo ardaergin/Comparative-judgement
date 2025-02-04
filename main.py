@@ -189,10 +189,10 @@ trial_instructions_sim.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-# trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
-# trial_instructions_sim.draw()
-# win.flip()
-# event.waitKeys(keyList=['space'])
+trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
+trial_instructions_sim.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 
 # ======================
@@ -209,9 +209,9 @@ run_trials(
     round_type="similarity",
     num_breaks=3,
     break_wait_time=20,
-    left_text="Plant-based Steak A",
-    right_text="Plant-based Steak B",
-    reference_text="Real Steak"
+    left_text="PLANT-BASED STEAK A",
+    right_text="PLANT-BASED STEAK B",
+    reference_text="REAL STEAK"
 )
 
 
@@ -232,10 +232,10 @@ trial_instructions_liking.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-# trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
-# trial_instructions_liking.draw()
-# win.flip()
-# event.waitKeys(keyList=['space'])
+trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
+trial_instructions_liking.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Main Trial Loop: Liking
@@ -245,16 +245,16 @@ run_trials(
     win, 
     trial_list=trial_list, 
     writer=writer, 
-    prompt_text="Which of the two plant-based steaks do you like more?\n(left = D, right = K)?",
+    prompt_text="Which of the two plant-based steaks do you like more?",
     comparison_images=trial_preloaded_images,
     reference_image=None, # or main_reference_image
     skip_time_limit=skip_time_limit, 
     round_type="liking",
     num_breaks=3,
     break_wait_time=20,
-    left_text="Plant-based Steak A",
-    right_text="Plant-based Steak B",
-    reference_text="Real Steak"
+    left_text="PLANT-BASED STEAK A",
+    right_text="PLANT-BASED STEAK B",
+    reference_text="REAL STEAK"
 )
 
 
