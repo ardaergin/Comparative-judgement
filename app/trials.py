@@ -94,6 +94,7 @@ def run_trials(
         prompt = visual.TextStim(
             win,
             text=prompt_text,
+            wrapWidth=1000,
             color='black',
             font=font,
             height=24,
