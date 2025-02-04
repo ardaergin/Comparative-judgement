@@ -24,7 +24,7 @@ win = visual.Window(
     fullscr=True,
     size=[1920, 1080],
     color=[1, 1, 1],
-    units='norm' # TODO: change this to 'norm', but I must change the other stuff
+    units='pix' # TODO: change this to 'norm', but I must change the other stuff
 )
 
 

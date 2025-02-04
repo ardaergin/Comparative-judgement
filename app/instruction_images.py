@@ -5,8 +5,8 @@ def create_scaled_image(win, image_path):
         win,
         image=image_path,
         pos=(0, 0),
-        units='norm',
-        size=(2,2)
+        units='pix',
+        size=(1920,1080)
     )
     
     # Get the image's aspect ratio
