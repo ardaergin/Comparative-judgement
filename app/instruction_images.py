@@ -5,7 +5,7 @@ def create_scaled_image(win, image_path):
         win,
         image=image_path,
         pos=(0, 0),
-        units='pix',
+        units='norm',
         size=(2,2)
     )
     
