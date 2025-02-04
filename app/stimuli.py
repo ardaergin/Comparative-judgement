@@ -24,7 +24,7 @@ def load_stimuli(comparison_dir):
     
     return comparison_files
 
-def preload_images(win, image_folder, image_list):
+def preload_images(win, image_folder, image_list, size):
     """
     Preload images into memory to reduce delays during the experiment.
 
@@ -39,7 +39,7 @@ def preload_images(win, image_folder, image_list):
     preloaded_images = {}
     for image_name in image_list:
         image_path = os.path.join(image_folder, image_name)
-        preloaded_images[image_name] = visual.ImageStim(win, image=image_path, size=(300, 300))
+        preloaded_images[image_name] = visual.ImageStim(win, image=image_path, size=size)
     return preloaded_images
 
 def setup_stimuli(comparison_files, pair_repeats):

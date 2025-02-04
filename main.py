@@ -22,9 +22,9 @@ experiment_font = "Times New Roman"
 ## Set up PsychoPy window
 win = visual.Window(
     fullscr=True,
-    # size=(1280, 720),
+    size=[1920, 1080],
     color=[1, 1, 1],
-    units='pix'
+    units='pix' # TODO: change this to 'norm', but I must change the other stuff
 )
 
 
@@ -33,28 +33,20 @@ win = visual.Window(
 # ======================
 # Practice stimuli
 practice_comparison_files = load_stimuli('images/practice/comparison')  # Load image filenames
-practice_preloaded_images = preload_images(win, 'images/practice/comparison', practice_comparison_files)  # Preload images
+practice_preloaded_images = preload_images(win, 'images/practice/comparison', practice_comparison_files, (300, 300))  # Preload images
 practice_trial_list = setup_stimuli(practice_comparison_files, 1)  # Generate trial list (1 repeat for practice)
 practice_reference_image = visual.ImageStim(win, image="images/practice/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
 
 # Main stimuli
 comparison_files = load_stimuli('images/trials/comparison')  # Load image filenames
-trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files)  # Preload images
+trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files, (300, 230))  # Preload images
 trial_list = setup_stimuli(comparison_files, pair_repeats)  # Generate trial list
-main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
+main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 230), pos=(0, 100))  # Preload reference image
 
 
 # ======================
 # Experiment Information
 # ======================
-
-# with open("texts/0_experiment_info.txt", "r") as file:
-#     experiment_info_text = file.read()
-# experiment_info = visual.TextStim(
-#     win,
-#     text=experiment_info_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
 
 experiment_info = create_scaled_image(win, "texts/0_experiment_info.png")
 experiment_info.draw()
@@ -121,23 +113,10 @@ event.waitKeys(keyList=['space'])
 # Instructions: Practice Rounds
 # ======================
 
-# with open("texts/4_practice_instructions.txt", "r") as file:
-#     practice_instructions_text = file.read()
-# practice_instructions = visual.TextStim(
-#     win,
-#     text=practice_instructions_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
-
 practice_instructions = create_scaled_image(win, "texts/4_practice_instructions.png")
 practice_instructions.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
-
-# practice_instructions = create_scaled_image(win, "texts/4_practice_instructions_visual.png")
-# practice_instructions.draw()
-# win.flip()
-# event.waitKeys(keyList=['space'])
 
 # ======================
 # Practice Rounds
@@ -146,7 +125,7 @@ run_trials(
     win, 
     trial_list=practice_trial_list, 
     writer=writer, 
-    prompt_text="Which of the products on the bottom is more similar to the product on top?\n(left = D, right = K)",
+    prompt_text="Which of the products on the bottom is more similar to the product on top?",
     comparison_images=practice_preloaded_images,
     reference_image=practice_reference_image,
     skip_time_limit=skip_time_limit, 
@@ -176,23 +155,15 @@ event.waitKeys(keyList=['space'])
 # Instructions: Similarity Trials
 # ======================
 
-# with open("texts/5_trial_instructions_sim.txt", "r") as file:
-#     trial_instructions_sim_text = file.read()
-# trial_instructions_sim = visual.TextStim(
-#     win,
-#     text=trial_instructions_sim_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
-
 trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim.png")
 trial_instructions_sim.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-# trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
-# trial_instructions_sim.draw()
-# win.flip()
-# event.waitKeys(keyList=['space'])
+trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim_visual.png")
+trial_instructions_sim.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 
 # ======================
@@ -202,16 +173,16 @@ run_trials(
     win, 
     trial_list=trial_list, 
     writer=writer, 
-    prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?\n(left = D, right = K)?",
+    prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?",
     comparison_images=trial_preloaded_images,
     reference_image=main_reference_image,
     skip_time_limit=skip_time_limit, 
     round_type="similarity",
     num_breaks=3,
     break_wait_time=20,
-    left_text="Plant-based Steak A",
-    right_text="Plant-based Steak B",
-    reference_text="Real Steak"
+    left_text="PLANT-BASED STEAK A",
+    right_text="PLANT-BASED STEAK B",
+    reference_text="BEEF STEAK"
 )
 
 
@@ -219,23 +190,15 @@ run_trials(
 # Instructions: Liking Trials
 # ======================
 
-# with open("texts/6_trial_instructions_liking.txt", "r") as file:
-#     trial_instructions_liking_text = file.read()
-# trial_instructions_liking = visual.TextStim(
-#     win,
-#     text=trial_instructions_liking_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
-
 trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking.png")
 trial_instructions_liking.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-# trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
-# trial_instructions_liking.draw()
-# win.flip()
-# event.waitKeys(keyList=['space'])
+trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking_visual.png")
+trial_instructions_liking.draw()
+win.flip()
+event.waitKeys(keyList=['space'])
 
 # ======================
 # Main Trial Loop: Liking
@@ -245,16 +208,16 @@ run_trials(
     win, 
     trial_list=trial_list, 
     writer=writer, 
-    prompt_text="Which of the two plant-based steaks do you like more?\n(left = D, right = K)?",
+    prompt_text="Which of the two plant-based steaks do you like more?",
     comparison_images=trial_preloaded_images,
     reference_image=None, # or main_reference_image
     skip_time_limit=skip_time_limit, 
     round_type="liking",
     num_breaks=3,
     break_wait_time=20,
-    left_text="Plant-based Steak A",
-    right_text="Plant-based Steak B",
-    reference_text="Real Steak"
+    left_text="PLANT-BASED STEAK A",
+    right_text="PLANT-BASED STEAK B",
+    reference_text="BEEF STEAK"
 )
 
 

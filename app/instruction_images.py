@@ -5,13 +5,14 @@ def create_scaled_image(win, image_path):
         win,
         image=image_path,
         pos=(0, 0),
-        units='norm'
+        units='pix',
+        size=(1920,1080)
     )
     
     # Get the image's aspect ratio
-    aspect_ratio = img.size[0] / img.size[1]
+    # aspect_ratio = img.size[0] / img.size[1]
     
-    # Set height to 90% of window height and scale width accordingly
-    img.size = (2 * aspect_ratio, 2)  # Adjust 1.8 to change overall size
+    # # Set height to 90% of window height and scale width accordingly
+    # img.size = (2 * aspect_ratio, 2)  # Adjust 1.8 to change overall size
     
     return img

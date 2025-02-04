@@ -6,7 +6,7 @@ def run_trials(
     trial_list, 
     writer=None, 
     skip_time_limit=4, 
-    prompt_text="Which is more similar to the reference image?\n(left = D, right = K)", 
+    prompt_text="Which is more similar to the reference image?", 
     comparison_images=None,  
     reference_image=None,    
     round_type="unknown",
@@ -45,6 +45,7 @@ def run_trials(
         win,
         text="You missed the last trial.\nPlease respond faster.\n\n"
              "We are interested in your initial impressions.\n\n"
+             "As a reminder: left = D, right = K\n\n"
              "Press the SPACE BAR to continue.",
         color='black',
         font=font,
