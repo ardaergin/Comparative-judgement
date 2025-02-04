@@ -33,15 +33,15 @@ win = visual.Window(
 # ======================
 # Practice stimuli
 practice_comparison_files = load_stimuli('images/practice/comparison')  # Load image filenames
-practice_preloaded_images = preload_images(win, 'images/practice/comparison', practice_comparison_files)  # Preload images
+practice_preloaded_images = preload_images(win, 'images/practice/comparison', practice_comparison_files, (300, 300))  # Preload images
 practice_trial_list = setup_stimuli(practice_comparison_files, 1)  # Generate trial list (1 repeat for practice)
 practice_reference_image = visual.ImageStim(win, image="images/practice/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
 
 # Main stimuli
 comparison_files = load_stimuli('images/trials/comparison')  # Load image filenames
-trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files)  # Preload images
+trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files, (300, 230))  # Preload images
 trial_list = setup_stimuli(comparison_files, pair_repeats)  # Generate trial list
-main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
+main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 230), pos=(0, 100))  # Preload reference image
 
 
 # ======================
@@ -146,7 +146,7 @@ run_trials(
     win, 
     trial_list=practice_trial_list, 
     writer=writer, 
-    prompt_text="Which of the products on the bottom is more similar to the product on top?\n(left = D, right = K)",
+    prompt_text="Which of the products on the bottom is more similar to the product on top?",
     comparison_images=practice_preloaded_images,
     reference_image=practice_reference_image,
     skip_time_limit=skip_time_limit, 
@@ -202,7 +202,7 @@ run_trials(
     win, 
     trial_list=trial_list, 
     writer=writer, 
-    prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?\n(left = D, right = K)?",
+    prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?",
     comparison_images=trial_preloaded_images,
     reference_image=main_reference_image,
     skip_time_limit=skip_time_limit, 
@@ -211,7 +211,7 @@ run_trials(
     break_wait_time=20,
     left_text="PLANT-BASED STEAK A",
     right_text="PLANT-BASED STEAK B",
-    reference_text="REAL STEAK"
+    reference_text="BEEF STEAK"
 )
 
 
@@ -254,7 +254,7 @@ run_trials(
     break_wait_time=20,
     left_text="PLANT-BASED STEAK A",
     right_text="PLANT-BASED STEAK B",
-    reference_text="REAL STEAK"
+    reference_text="BEEF STEAK"
 )
 
 
