@@ -26,4 +26,4 @@ def convert_pdf_to_images(pdf_path, output_format="png", dpi=300):
     
     doc.close()
 
-convert_pdf_to_images("instructions.pdf", output_format="png", dpi=900)
+convert_pdf_to_images("instructions.pdf", output_format="png", dpi=1200)
