@@ -39,7 +39,7 @@ practice_reference_image = visual.ImageStim(win, image="images/practice/referenc
 
 # Main stimuli
 comparison_files = load_stimuli('images/trials/comparison')  # Load image filenames
-trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files, (300, 230))  # Preload images
+trial_preloaded_images = preload_images(win, 'images/trials/comparison', comparison_files, (300, 300))  # Preload images
 trial_list = setup_stimuli(comparison_files, pair_repeats)  # Generate trial list
 main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_image.png", size=(300, 300), pos=(0, 100))  # Preload reference image
 
