@@ -48,14 +48,6 @@ main_reference_image = visual.ImageStim(win, image="images/trials/reference/ref_
 # Experiment Information
 # ======================
 
-# with open("texts/0_experiment_info.txt", "r") as file:
-#     experiment_info_text = file.read()
-# experiment_info = visual.TextStim(
-#     win,
-#     text=experiment_info_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
-
 experiment_info = create_scaled_image(win, "texts/0_experiment_info.png")
 experiment_info.draw()
 win.flip()
@@ -121,23 +113,10 @@ event.waitKeys(keyList=['space'])
 # Instructions: Practice Rounds
 # ======================
 
-# with open("texts/4_practice_instructions.txt", "r") as file:
-#     practice_instructions_text = file.read()
-# practice_instructions = visual.TextStim(
-#     win,
-#     text=practice_instructions_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
-
 practice_instructions = create_scaled_image(win, "texts/4_practice_instructions.png")
 practice_instructions.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
-
-# practice_instructions = create_scaled_image(win, "texts/4_practice_instructions_visual.png")
-# practice_instructions.draw()
-# win.flip()
-# event.waitKeys(keyList=['space'])
 
 # ======================
 # Practice Rounds
@@ -176,14 +155,6 @@ event.waitKeys(keyList=['space'])
 # Instructions: Similarity Trials
 # ======================
 
-# with open("texts/5_trial_instructions_sim.txt", "r") as file:
-#     trial_instructions_sim_text = file.read()
-# trial_instructions_sim = visual.TextStim(
-#     win,
-#     text=trial_instructions_sim_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
-
 trial_instructions_sim = create_scaled_image(win, "texts/5_trial_instructions_sim.png")
 trial_instructions_sim.draw()
 win.flip()
@@ -218,14 +189,6 @@ run_trials(
 # ======================
 # Instructions: Liking Trials
 # ======================
-
-# with open("texts/6_trial_instructions_liking.txt", "r") as file:
-#     trial_instructions_liking_text = file.read()
-# trial_instructions_liking = visual.TextStim(
-#     win,
-#     text=trial_instructions_liking_text,
-#     height=24, wrapWidth=800, color='black', pos=(0, 0)
-# )
 
 trial_instructions_liking = create_scaled_image(win, "texts/6_trial_instructions_liking.png")
 trial_instructions_liking.draw()
