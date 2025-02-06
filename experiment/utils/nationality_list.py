@@ -1,4 +1,4 @@
-country_adjectivals = {
+COUNTRY_ADJECTIVALS = {
     "Abkhazia": ["Abkhaz", "Abkhazian"],
     "Afghanistan": ["Afghan"],
     "Aland": ["Aland Island"],
