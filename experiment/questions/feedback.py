@@ -44,17 +44,17 @@ def ask_feedback(display: Display):
     next_button = visual.TextStim(
         win,
         text="Finish",
-        height=24,
+        height=0.1,
         color='black',
-        pos=(0, -200)
+        pos=(0, -0.4)
     )
     
     # Create a clickable area (a rectangular button) for the finish button.
     button_box = visual.Rect(
         win,
         width=100,
-        height=50,
-        pos=(0, -200),
+        height=0.25,
+        pos=(0, -0.4),
         fillColor=None,
         lineColor='black'
     )
@@ -67,10 +67,10 @@ def ask_feedback(display: Display):
         instruction_text_stim = visual.TextStim(
             win,
             text=instruction_text,
-            height=24,
-            wrapWidth=800,
+            height=0.1,
+            wrapWidth=1,
             color='black',
-            pos=(0, 200),
+            pos=(0, 0.4),
             alignText='center'
         )
         instruction_text_stim.draw()

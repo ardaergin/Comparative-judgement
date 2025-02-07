@@ -17,9 +17,8 @@ class ExperimentRunner:
         # Set up window
         self.display = Display(visual.Window(
             fullscr=True,
-            size=[1920, 1080],
             color=[1, 1, 1],
-            units='pix'
+            units='height'
         ), font=self.experiment_font)
         
         # Initialize screens
@@ -56,14 +55,14 @@ class ExperimentRunner:
             comparison_dir='images/practice/comparison',
             reference_dir='images/practice/reference'
         )
-        self.practice_stimuli_manager.load_stimuli(self.display.window, size=(300, 300))
+        self.practice_stimuli_manager.load_stimuli(self.display.window)
         
         # Main stimuli
         self.trial_stimuli_manager = StimuliManager(
             comparison_dir='images/trials/comparison',
             reference_dir='images/trials/reference'
         )
-        self.trial_stimuli_manager.load_stimuli(self.display.window, size=(300, 300))
+        self.trial_stimuli_manager.load_stimuli(self.display.window)
 
     def run(self):
         """Run the complete experiment"""

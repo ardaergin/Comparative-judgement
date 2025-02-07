@@ -20,8 +20,8 @@ class Display:
         window: visual.Window,
         font: str = "Times New Roman",
         text_color: str = 'black',
-        text_height: int = 24,
-        wrap_width: int = 800,
+        text_height: int = 0.03,
+        wrap_width: int = 1,
         pos: Tuple[float, float] = (0, 0)
     ):
         self.window = window
@@ -38,15 +38,18 @@ class Display:
         """Initialize commonly used stimuli."""
         self.continue_text = self._create_text_stimulus(
             "Press SPACE to continue", 
-            pos=(0, -400)
+            position=(0, -0.45),
+            Text_alignment='center'
         )
         self.enter_text = self._create_text_stimulus(
             "Press ENTER to submit response and continue", 
-            pos=(0, -400)
+            position=(0, -0.45),
+            Text_alignment='center'
         )
         self.escape_text = self._create_text_stimulus(
             "Press ESCAPE to quit", 
-            pos=(0, -450)
+            position=(0, -0.45),
+            Text_alignment='center'
         )
     
     def _safe_read_file(self, file_path: Union[str, Path]) -> str:
@@ -70,6 +73,8 @@ class Display:
         self, 
         text: str, 
         position: Optional[Tuple[float, float]] = None,
+        Text_alignment='left',
+        Horizontal_anchor='center',
         **kwargs
     ) -> visual.TextStim:
         """
@@ -94,38 +99,51 @@ class Display:
             font=self.font,
             wrapWidth=self.wrap_width,
             pos=pos,
-            alignText='left',
-            anchorHoriz='center',
+            alignText=Text_alignment,
+            anchorHoriz=Horizontal_anchor,
             **kwargs
         )
     
     def _create_image_stimulus(
         self,
         image_path: Union[str, Path],
-        size: Optional[Tuple[int, int]] = None,
+        size: Optional[Tuple[float, float]] = None,
         position: Optional[Tuple[float, float]] = None
     ) -> visual.ImageStim:
         """
         Create an image stimulus without displaying it.
         
-        Args:
-            image_path: Path to the image file.
-            size: Optional (width, height); defaults to original image size.
-            position: Optional position; defaults to self.pos.
-            
-        Returns:
-            A PsychoPy ImageStim object.
+        If 'size' is provided, it is treated as a target maximum (width, height) in norm units.
+        The image will be scaled to fit within that box without changing its aspect ratio.
+        If 'size' is None, the image is loaded at its natural size (converted to norm units).
         """
         pos = position if position is not None else self.pos
-        
+
+        # Open the image to get its original dimensions in pixels.
+        with Image.open(image_path) as img:
+            orig_width, orig_height = img.size
+
+        # Convert the original pixel size to norm units.
+        # (Again, using the convention that 1 norm unit = win.size[1]/2 pixels)
+        conversion_factor = self.window.size[1] / 2.0
+        orig_width_norm = orig_width / conversion_factor
+        orig_height_norm = orig_height / conversion_factor
+
         if size is None:
-            with Image.open(image_path) as img:
-                size = img.size
+            # Use the image's natural size in norm units.
+            norm_size = (orig_width_norm, orig_height_norm)
+        else:
+            # size is the maximum allowed (target) width and height in norm units.
+            target_width, target_height = size
+            scale_factor = min(target_width / orig_width_norm, target_height / orig_height_norm)
+            norm_size = (orig_width_norm * scale_factor, orig_height_norm * scale_factor)
+
         return visual.ImageStim(
             self.window,
             image=str(image_path),
-            size=size,
-            pos=pos
+            size=norm_size,
+            pos=pos,
+            units='height'
         )
     
     def load_text(
@@ -288,7 +306,7 @@ class Display:
         Returns:
             The user's response.
         """
-        question_stim = self._create_text_stimulus(question, (self.pos[0], self.pos[1] + 200))
+        question_stim = self._create_text_stimulus(question, (self.pos[0], self.pos[1] + 0.1))
         response_stim = self._create_text_stimulus("", self.pos)
         if allowed_chars is None:
             allowed_chars = set(string.ascii_letters + string.digits + string.punctuation + " ")
@@ -336,7 +354,7 @@ class Display:
         labels: Optional[Dict[int, str]] = None,
         prompt_pos: Optional[Tuple[float, float]] = None,
         scale_pos: Optional[Tuple[float, float]] = None,
-        scale_width: float = 800,
+        scale_width: float = 1,
         allow_escape: bool = True
     ) -> Optional[int]:
         """

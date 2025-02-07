@@ -21,7 +21,7 @@ class StimuliManager:
         self.reference: Optional[Stimulus] = None
         self.pairs: List[Comparison] = []
         
-    def load_stimuli(self, win: visual.Window, size: Tuple[int, int] = (300, 300)):
+    def load_stimuli(self, win: visual.Window):
         """
         Load and preload all stimuli.
 
@@ -38,7 +38,6 @@ class StimuliManager:
             stimulus = Stimulus(
                 filename=filename,
                 image_path=image_path,
-                target_size_px=size,
                 win=win
             )
             self.stimuli.append(stimulus)
@@ -62,7 +61,6 @@ class StimuliManager:
             self.reference = Stimulus(
                 filename=ref_filename,
                 image_path=ref_image_path,
-                target_size_px=size,
                 win=win
             )
 

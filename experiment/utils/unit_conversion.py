@@ -1,5 +1,6 @@
 from typing import Tuple, Union
 from psychopy import visual
+from PIL import Image
 
 class UnitConverter:
     """Utility class to convert sizes between different PsychoPy units"""

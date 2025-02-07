@@ -15,6 +15,7 @@ class BlockConfig:
     left_text: str = "Left Image"
     right_text: str = "Right Image"
     reference_text: str = "Reference Image"
+    text_height: int = 0.03
 
 class Block:
     """Manages a block of trials with consistent configuration and presentation"""
@@ -45,7 +46,7 @@ class Block:
         self.fixation = visual.TextStim(
             self.window, 
             text="+", 
-            height=50, 
+            height=0.1, 
             color='black',
             font=self.config.font,
             pos=(0, 0)
@@ -59,8 +60,8 @@ class Block:
                   "Press the SPACE BAR to continue."),
             color='black',
             font=self.config.font,
-            height=24,
-            wrapWidth=800,
+            height=self.config.text_height,
+            wrapWidth=1,
             pos=(0, 0)
         )
         
@@ -69,29 +70,33 @@ class Block:
             text=self.config.prompt_text,
             color='black',
             font=self.config.font,
-            height=24,
-            pos=(0, 350)
+            height=self.config.text_height,
+            wrapWidth=2, # very large so it does not wrap.
+            pos=(0, 0.3)
         )
 
     def _get_image_positions(self, round_type: str) -> dict:
-        """Get positions for images and labels based on round type"""
+        """Get positions for images and labels based on round type in normalized units"""
         if round_type == "liking":
             return {
                 # Comparison positions:
-                'left_image': (-250, -50),
-                'right_image': (250, -50),
-                'left_text': (-250, 120),
-                'right_text': (250, 120)
+                'left_image': (-0.2, -0.1),
+                'left_text': (-0.2, 0.15),
+
+                'right_image': (0.2, -0.1),
+                'right_text': (0.2, 0.15)
             }
         return {
             # Comparison positions:
-            'left_image': (-250, -200),
-            'right_image': (250, -200),
-            'left_text': (-250, -30),
-            'right_text': (250, -30),
-            # Reference position:
-            'reference_text': (0, 270),
-            'reference_image': (0, 350)
+            'left_image': (-0.2, 0),
+            'left_text': (-0.2, 0.25),
+
+            'right_image': (0.2, 0),
+            'right_text': (0.2, 0.25),
+
+            # Reference positions:
+            'reference_text': (0, 0.3),
+            'reference_image': (0, 0.2)
         }
 
     def _create_text_stimuli(self, positions: dict, round_type: str) -> dict:
@@ -102,7 +107,7 @@ class Block:
                 text=self.config.left_text,
                 color='black',
                 font=self.config.font,
-                height=24,
+                height=self.config.text_height,
                 pos=positions['left_text']
             ),
             'right': visual.TextStim(
@@ -110,7 +115,7 @@ class Block:
                 text=self.config.right_text,
                 color='black',
                 font=self.config.font,
-                height=24,
+                height=self.config.text_height,
                 pos=positions['right_text']
             )
         }
@@ -121,7 +126,7 @@ class Block:
                 text=self.config.reference_text,
                 color='black',
                 font=self.config.font,
-                height=24,
+                height=self.config.text_height,
                 pos=positions['reference_text']
             )
             
@@ -131,10 +136,10 @@ class Block:
         """Display feedback for chosen stimulus"""
         blue_border = visual.Rect(
             self.window,
-            width=chosen_stim.psychopy_stim.size[0] + 10,
-            height=chosen_stim.psychopy_stim.size[1] + 10,
+            width=chosen_stim.psychopy_stim.size[0] + 0.05,
+            height=chosen_stim.psychopy_stim.size[1] + 0.05,
             lineColor='blue',
-            lineWidth=5,
+            lineWidth=0.05,
             pos=chosen_stim.psychopy_stim.pos
         )
 
@@ -160,8 +165,8 @@ class Block:
             text=break_text,
             color='black',
             font=self.config.font,
-            height=24,
-            wrapWidth=800,
+            height=self.config.text_height,
+            wrapWidth=1,
             pos=(0, 0)
         )
         
@@ -211,7 +216,7 @@ class Block:
             # Draw trial
             self.prompt.draw()
             if trial.reference and trial.round_type != "liking":
-                trial.reference.set_position(positions['reference_image'], units='pix')
+                trial.reference.set_position(positions['reference_image'])
                 trial.reference.psychopy_stim.draw()
                 text_stimuli['reference'].draw()
             trial.pair.left_stimuli.psychopy_stim.draw()
