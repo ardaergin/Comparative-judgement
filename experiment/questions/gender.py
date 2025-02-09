@@ -11,8 +11,7 @@ def ask_gender(display: Display):
         str: The selected gender option.
     """
     
-    question = ("What is your gender?\n"
-                "(Please press the number corresponding to your chosen option.)")
+    question = ("What is your gender?")
     options = ["Male", "Female", "Non-binary", "Prefer not to say"]
     
-    return display.multiple_choice_prompt(question, options)
+    return display.display_multiple_choice(question, options)

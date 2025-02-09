@@ -23,6 +23,10 @@ class Participant:
     def add_demographics(self, demographics: Dict):
         self.demographics = demographics
     
+    def mark_end(self):
+        """Record the end time of the experiment."""
+        self.end_time = datetime.now().strftime("%Y%m%d_%H%M%S")
+
     def add_feedback(self, feedback: str):
         self.feedback = feedback
     
@@ -30,18 +34,21 @@ class Participant:
         """Convert all data to JSON-serializable format"""
         return {
             "participant_id": self.participant_id,
-            "timestamp": self.timestamp,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
             "demographics": self.demographics,
             "feedback": self.feedback,
             "trials": [
                 {
-                    "trial_num": t.trial_num,
-                    "round_type": t.round_type,
-                    "left_stimulus": t.pair.left_stimuli.filename,
-                    "right_stimulus": t.pair.right_stimuli.filename,
-                    "response": t.response,
-                    "reaction_time": t.reaction_time
+                    "trial_num": trial.trial_num,
+                    "round_type": trial.round_type,
+                    "left_stimulus": trial.pair.left_stimuli.filename,
+                    "right_stimulus": trial.pair.right_stimuli.filename,
+                    "comparison_hash": hash(trial.pair),
+                    "comparison_order": trial.pair.order_indicator,
+                    "response": trial.response,
+                    "reaction_time": trial.reaction_time
                 }
-                for t in self.trials
+                for trial in self.trials
             ]
         }

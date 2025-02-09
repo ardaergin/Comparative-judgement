@@ -11,8 +11,7 @@ def ask_eat_frequency(display: Display):
     Returns:
         str: The selected frequency option.
     """
-    question = ("How often do you eat plant-based meat alternatives?\n"
-                "(Please press the number corresponding to your chosen option.)")
+    question = ("How often do you eat plant-based meat alternatives?")
     options = [
         "Never",
         "Once every three months",
@@ -21,4 +20,4 @@ def ask_eat_frequency(display: Display):
         "A couple of times per week",
         "Every day"
     ]
-    return display.multiple_choice_prompt(question, options)
+    return display.display_multiple_choice(question, options)

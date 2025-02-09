@@ -46,7 +46,7 @@ class Block:
         self.fixation = visual.TextStim(
             self.window, 
             text="+", 
-            height=0.1, 
+            height=0.08, 
             color='black',
             font=self.config.font,
             pos=(0, 0)
@@ -71,8 +71,8 @@ class Block:
             color='black',
             font=self.config.font,
             height=self.config.text_height,
-            wrapWidth=2, # very large so it does not wrap.
-            pos=(0, 0.3)
+            wrapWidth=5, # very large so it does not wrap.
+            pos=(0, 0.45)
         )
 
     def _get_image_positions(self, round_type: str) -> dict:
@@ -80,24 +80,38 @@ class Block:
         if round_type == "liking":
             return {
                 # Comparison positions:
-                'left_image': (-0.2, -0.1),
-                'left_text': (-0.2, 0.15),
+                'left_image': (-0.3, 0),
+                'left_text': (-0.3, 0.2),
 
-                'right_image': (0.2, -0.1),
-                'right_text': (0.2, 0.15)
+                'right_image': (0.3, 0),
+                'right_text': (0.3, 0.2)
             }
-        return {
-            # Comparison positions:
-            'left_image': (-0.2, 0),
-            'left_text': (-0.2, 0.25),
+        elif round_type == "comparisonn":
+            return {
+                # Comparison positions:
+                'left_image': (-0.3, -0.25),
+                'left_text': (-0.3, -0.05),
 
-            'right_image': (0.2, 0),
-            'right_text': (0.2, 0.25),
+                'right_image': (0.3, -0.25),
+                'right_text': (0.3, -0.05),
 
-            # Reference positions:
-            'reference_text': (0, 0.3),
-            'reference_image': (0, 0.2)
-        }
+                # Reference positions:
+                'reference_text': (0, 0.30),
+                'reference_image': (0, 0.15)
+            }
+        else: # if round_type == "pracice":
+            return {
+                # Comparison positions:
+                'left_image': (-0.3, -0.25),
+                'left_text': (-0.3, -0.05),
+
+                'right_image': (0.3, -0.25),
+                'right_text': (0.3, -0.05),
+
+                # Reference positions:
+                'reference_text': (0, 0.35),
+                'reference_image': (0, 0.15)
+            }
 
     def _create_text_stimuli(self, positions: dict, round_type: str) -> dict:
         """Create text stimuli for image labels"""
@@ -134,21 +148,22 @@ class Block:
 
     def _show_feedback(self, chosen_stim: visual.ImageStim, trial: Trial):
         """Display feedback for chosen stimulus"""
-        blue_border = visual.Rect(
-            self.window,
-            width=chosen_stim.psychopy_stim.size[0] + 0.05,
-            height=chosen_stim.psychopy_stim.size[1] + 0.05,
-            lineColor='blue',
-            lineWidth=0.05,
-            pos=chosen_stim.psychopy_stim.pos
-        )
+        # blue_border = visual.Rect(
+        #     self.window,
+        #     width=chosen_stim.psychopy_stim.size[0] + 0.05,
+        #     height=chosen_stim.psychopy_stim.size[1] + 0.05,
+        #     lineColor='blue',
+        #     lineWidth=0.5,
+        #     pos=chosen_stim.psychopy_stim.pos
+        # )
 
-        self.prompt.draw()
-        if trial.reference:
-            trial.reference.psychopy_stim.draw()
-        trial.pair.left_stimuli.psychopy_stim.draw()
-        trial.pair.right_stimuli.psychopy_stim.draw()
-        blue_border.draw()
+        # self.prompt.draw()
+        # if trial.reference:
+        #     trial.reference.psychopy_stim.draw()
+        # trial.pair.left_stimuli.psychopy_stim.draw()
+        # trial.pair.right_stimuli.psychopy_stim.draw()
+        # blue_border.draw()
+        chosen_stim.psychopy_stim.draw()
         self.window.flip()
         core.wait(0.5)
 

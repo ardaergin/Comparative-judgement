@@ -36,18 +36,21 @@ class Display:
     
     def _init_common_stimuli(self):
         """Initialize commonly used stimuli."""
+        # Default continue text 
         self.continue_text = self._create_text_stimulus(
             "Press SPACE to continue", 
             position=(0, -0.45),
             Text_alignment='center'
         )
-        self.enter_text = self._create_text_stimulus(
-            "Press ENTER to submit response and continue", 
+        # Continue text for free choice questions
+        self.continue_text_FCQ = self._create_text_stimulus(
+            "Type your response using the keyboard \nPress ENTER to submit your response and continue", 
             position=(0, -0.45),
             Text_alignment='center'
         )
-        self.escape_text = self._create_text_stimulus(
-            "Press ESCAPE to quit", 
+        # Continue text for multiple choice questions
+        self.continue_text_MCQ = self._create_text_stimulus(
+            "Press the number corresponding to your chosen option \nto make a selection and continue", 
             position=(0, -0.45),
             Text_alignment='center'
         )
@@ -107,41 +110,48 @@ class Display:
     def _create_image_stimulus(
         self,
         image_path: Union[str, Path],
-        size: Optional[Tuple[float, float]] = None,
         position: Optional[Tuple[float, float]] = None
     ) -> visual.ImageStim:
         """
         Create an image stimulus without displaying it.
-        
-        If 'size' is provided, it is treated as a target maximum (width, height) in norm units.
-        The image will be scaled to fit within that box without changing its aspect ratio.
-        If 'size' is None, the image is loaded at its natural size (converted to norm units).
         """
         pos = position if position is not None else self.pos
 
-        # Open the image to get its original dimensions in pixels.
+        # 1. Get the original image dimensions in pixels.
         with Image.open(image_path) as img:
-            orig_width, orig_height = img.size
+            orig_width, orig_height = img.size 
 
-        # Convert the original pixel size to norm units.
-        # (Again, using the convention that 1 norm unit = win.size[1]/2 pixels)
-        conversion_factor = self.window.size[1] / 2.0
-        orig_width_norm = orig_width / conversion_factor
-        orig_height_norm = orig_height / conversion_factor
+        # 2. Get screen dimensions (in pixels) from the PsychoPy window.
+        screen_width, screen_height = self.window.size  
 
-        if size is None:
-            # Use the image's natural size in norm units.
-            norm_size = (orig_width_norm, orig_height_norm)
-        else:
-            # size is the maximum allowed (target) width and height in norm units.
-            target_width, target_height = size
-            scale_factor = min(target_width / orig_width_norm, target_height / orig_height_norm)
-            norm_size = (orig_width_norm * scale_factor, orig_height_norm * scale_factor)
+        # We want the height of the image to be 1
+        # However, we do not want it to overflow from the sides
+        # if the screen is a bit more square-ish than we expected
+        # So, we should add a failsafe
+        image_ratio = orig_width/orig_height # e.g. 16/9 = 1.77
+        screen_ratio = screen_width/screen_height
+        # Three possibilities
+        # - e.g., 14/9 = 1.55 --> narrower screen
+        # - e.g., 18/9 = 2 --> wider screen
+        # - e.g., 16/9 = 1.77 --> same aspect ratio
+        # If same aspect ratio or wider, we are good 
+        # since we can just set the height to 1,
+        # and we know that it will not overflow.
+        if screen_ratio >= image_ratio:
+            height_h = 1
+            width_h = orig_width / orig_height
+        else: # screen_ratio < image_ratio:
+            height_h = screen_ratio / image_ratio
+            width_h = screen_ratio
+
+        # Our texts have a lot of white space around them so:
+        height_h *= 1.2
+        width_h *= 1.2
 
         return visual.ImageStim(
             self.window,
             image=str(image_path),
-            size=norm_size,
+            size=(width_h, height_h),
             pos=pos,
             units='height'
         )
@@ -190,7 +200,6 @@ class Display:
     def load_image(
         self,
         image_path: Union[str, Path],
-        size: Optional[Tuple[int, int]] = None,
         position: Optional[Tuple[float, float]] = None
     ) -> visual.ImageStim:
         """
@@ -204,7 +213,7 @@ class Display:
         Returns:
             A preloaded ImageStim.
         """
-        return self._create_image_stimulus(image_path, size, position)
+        return self._create_image_stimulus(image_path, position)
     
     def display_stimulus(
         self,
@@ -230,8 +239,6 @@ class Display:
         stimulus.draw()
         if show_continue:
             self.continue_text.draw()
-        if allow_escape:
-            self.escape_text.draw()
         self.window.flip()
                 
         if wait_for_space:
@@ -247,9 +254,8 @@ class Display:
     def display_multiple_choice(
         self,
         prompt: str,
-        options: List[MultipleChoiceOption],
+        options: List,
         prompt_pos: Optional[Tuple[float, float]] = None,
-        show_continue: bool = False,
         allow_escape: bool = True
     ) -> Optional[str]:
         """
@@ -257,35 +263,54 @@ class Display:
         
         Args:
             prompt: The question prompt.
-            options: A list of MultipleChoiceOption objects.
-            prompt_pos: Position of the prompt text; defaults to (self.pos[0], self.pos[1]+200).
+            options: A list of options, either as strings or MultipleChoiceOption objects.
+            prompt_pos: Position of the prompt text (in height units).
             show_continue: Whether to show the continue prompt.
             allow_escape: Whether to allow quitting via escape.
             
         Returns:
             The selected option's value.
         """
-        prompt_position = prompt_pos if prompt_pos is not None else (self.pos[0], self.pos[1] + 200)
+        # Use a default prompt position (in height units) if none is provided.
+        # Here, self.pos is the default center (0,0); we shift upward by 0.3 height units.
+        prompt_position = prompt_pos if prompt_pos is not None else (self.pos[0], self.pos[1] + 0.3)
         prompt_stim = self._create_text_stimulus(prompt, prompt_position)
         
-        # Draw each option
+        # If the options are provided as strings, automatically convert them.
+        # We'll assign positions relative to the prompt position.
+        if options and isinstance(options[0], str):
+            spacing = 0.075  # vertical spacing in height units
+            base_y = prompt_position[1] - 0.15  # start a bit below the prompt
+            new_options = []
+            for i, opt in enumerate(options):
+                # For horizontal centering, we use self.pos[0].
+                pos = (self.pos[0], base_y - i * spacing)
+                # Prefix the option text with the corresponding number.
+                numbered_text = f"({i + 1}) {opt}"
+                new_options.append(MultipleChoiceOption(text=numbered_text, value=str(i + 1), position=pos))
+            options = new_options
+
+        # Draw each option.
         for option in options:
             opt_stim = self._create_text_stimulus(option.text, option.position)
             opt_stim.draw()
         prompt_stim.draw()
-        if show_continue:
-            self.continue_text.draw()
-        if allow_escape:
-            self.escape_text.draw()
+
+        # Continue or enter
+        self.continue_text_MCQ.draw()
+
         self.window.flip()
         
+        # Build the list of valid keys from the option values.
         valid_keys = [opt.value for opt in options]
         if allow_escape:
             valid_keys.append('escape')
+        
         response = event.waitKeys(keyList=valid_keys)
         if response and response[0] == 'escape':
             self.quit_experiment()
         return response[0] if response else None
+
 
     def free_text_prompt(
         self,
@@ -318,8 +343,13 @@ class Display:
             question_stim.draw()
             response_stim.setText(response)
             response_stim.draw()
+
+            # Continue text
+            self.continue_text_FCQ.draw()
+
             self.window.flip()
-            
+
+            # Keys
             keys = event.waitKeys()
             for key in keys:
                 if key == 'return':
@@ -333,10 +363,10 @@ class Display:
                         response = ""
                 elif key == 'backspace':
                     response = response[:-1]
-                elif key == 'space':
-                    response += " "
-                elif key == 'escape':
-                    self.quit_experiment()
+                # elif key == 'space':
+                #     response += " "
+                # elif key == 'escape':
+                #     self.quit_experiment()
                 elif len(key) == 1 and key in allowed_chars:
                     if max_length is None or len(response) < max_length:
                         response += key
@@ -407,8 +437,6 @@ class Display:
             number.draw()
             if label:
                 label.draw()
-        if allow_escape:
-            self.escape_text.draw()
         self.window.flip()
         
         valid_keys = [str(i) for i in range(1, scale_points + 1)]

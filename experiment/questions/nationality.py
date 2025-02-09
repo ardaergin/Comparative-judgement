@@ -20,8 +20,7 @@ def ask_nationality(display: Display):
     def validate_nationality(input_text):
         return input_text.lower() in valid_nationalities
 
-    question = ("What is your nationality?\n"
-                "(Please enter your nationality and press ENTER)")
+    question = ("What is your nationality?")
     # Allow lowercase letters, space, and hyphen.
     allowed = string.ascii_lowercase + " -"
     return display.free_text_prompt(question,

@@ -71,12 +71,11 @@ class ExperimentRunner:
             self._load_stimuli()
     
             # Starting the experiment
-            self.display.display_stimulus(self.screens["experiment_info"], show_continue=False)
-            self.display.display_stimulus(self.screens["consent"], show_continue=False, allow_escape=True)
+            self.display.display_stimulus(self.screens["experiment_info"])
+            self.display.display_stimulus(self.screens["consent"], allow_escape=True)
             
-            participant_id = ask_id(self.display)
-
             # Initialize Participant instance and Data manager
+            participant_id = ask_id(self.display)
             participant = Participant(participant_id)
             data_manager = DataManager(participant)
             
@@ -90,6 +89,7 @@ class ExperimentRunner:
             practice_trials = self.practice_stimuli_manager.generate_trials(
                 round_type="practice", 
                 pair_repeats=self.pair_repeats)
+            
             practice_config = BlockConfig(
                 prompt_text="Which of the products on the bottom is more similar to the product on top?",
                 num_breaks=0,
@@ -119,6 +119,9 @@ class ExperimentRunner:
             similarity_trials = self.trial_stimuli_manager.generate_trials(
                 round_type="similarity", 
                 pair_repeats=self.pair_repeats)
+            for trial in similarity_trials:
+                print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
+
             similarity_config = BlockConfig(
                 prompt_text="Which of the products on the bottom is more similar to the product on top?",
                 num_breaks=3,
@@ -147,6 +150,9 @@ class ExperimentRunner:
             liking_trials = self.trial_stimuli_manager.generate_trials(
                 round_type="liking", 
                 pair_repeats=self.pair_repeats)
+            for trial in liking_trials:
+                print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
+
             liking_config = BlockConfig(
                 prompt_text="Which of the two plant-based steaks do you like more?",
                 num_breaks=3,
@@ -181,12 +187,18 @@ class ExperimentRunner:
             demographics['eat_frequency'] = ask_eat_frequency(self.display)
             data_manager.save_demographics(demographics)
 
+            # Recording the end time
+            participant.mark_end()
+
             # Feedback
             feedback = ask_feedback(self.display)
             data_manager.save_feedback(feedback)
 
+            # Save all data
+            data_manager.save_all()
+
             # End of experiment screen
-            self.display.display_stimulus(self.screens["end_of_experiment"], wait_for_space=False)
+            self.display.display_stimulus(self.screens["end_of_experiment"], wait_for_space=False, show_continue=False)
             core.wait(30)
             self.display.quit_experiment()
 

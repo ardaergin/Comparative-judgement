@@ -18,8 +18,7 @@ def ask_age(display: Display):
         except ValueError:
             return False
 
-    question = ("What is your age?\n"
-                "(Please enter a number between 16 and 99 and press ENTER)")
+    question = ("What is your age?")
     
     return display.free_text_prompt(question,
                                     validation_func=validate_age,

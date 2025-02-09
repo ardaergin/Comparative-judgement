@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from .stimulus import Stimulus
 from typing import Optional
+from .stimulus import Stimulus
 
 @dataclass
 class Comparison:
@@ -35,3 +35,16 @@ class Comparison:
     def id(self) -> str:
         """Unique identifier for the pair"""
         return f"{self.left_stimuli.id}_vs_{self.right_stimuli.id}"
+
+    @property
+    def order_indicator(self) -> int:
+        """
+        Returns an indicator of the ordering:
+        - Returns 1 if the left image is the first in sorted order,
+        - Returns 2 if the left image is the second in sorted order.
+        
+        This tells you whether the comparison was, for example,
+        'img1-img2' (1) or 'img2-img1' (2) relative to the sorted order.
+        """
+        sorted_files = sorted([self.left_stimuli.filename, self.right_stimuli.filename])
+        return 1 if self.left_stimuli.filename == sorted_files[0] else 2

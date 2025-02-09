@@ -10,8 +10,7 @@ def ask_diet(display: Display):
     Returns:
         str: The selected dietary option.
     """
-    question = ("How would you describe your diet?\n"
-                "(Please press the number corresponding to your chosen option.)")
+    question = ("How would you describe your diet?")
     options = [
         "Omnivore (I eat animal products)",
         "Vegetarian",
@@ -20,4 +19,4 @@ def ask_diet(display: Display):
         "Other"
     ]
     
-    return display.multiple_choice_prompt(question, options)
+    return display.display_multiple_choice(question, options)

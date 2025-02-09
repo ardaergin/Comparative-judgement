@@ -12,67 +12,62 @@ def ask_feedback(display: Display):
     Returns:
         str: The participant's feedback.
     """
-    win = display.window  # Get the underlying window from the Display instance
+    # Get the underlying window from the Display instance
+    win = display.window
 
-    # Instructions for providing feedback.
-    instruction_text = (
-        "This was the end of this session, thank you very much for your participation!\n\n"
-        "If you have any remarks, questions or feedback regarding this study, "
-        "please enter them below. It will be really helpful for us to know how "
-        "you made your decisions. If not, you can just click on the 'Finish' button."
+    # The text to use
+    with open("texts/8_comment_screen.txt", "r") as file:
+        comment_text = file.read()
+    instruction_text_stim = visual.TextStim(
+        win,
+        text=comment_text,
+        font=display.font,
+        height=display.text_height,
+        wrapWidth=1,
+        color='black',
+        pos=(0, 0.3),
+        alignText='center'
     )
-    
-    # Display the instructions (non-blocking).
-    display.display_text(instruction_text, position=(0, 200), wait_for_space=False)
-    
+
     # Create a multi-line TextBox2 for feedback.
     feedback_box = visual.TextBox2(
         win,
         text="",
-        font="Arial",
-        letterHeight=24,
-        size=(600, 200),  # width, height in pixels
+        font=display.font,
+        letterHeight=display.text_height,
+        size=(0.8, 0.3),
         pos=(0, 0),
-        color='black',
+        color=display.text_color,
         fillColor='white',
         borderColor='black',
         editable=True,
-        anchor='center'
+        anchor='center',
+        units='height'
     )
     
     # Create a "Finish" button using a TextStim.
     next_button = visual.TextStim(
         win,
         text="Finish",
-        height=0.1,
+        height=display.text_height,
         color='black',
         pos=(0, -0.4)
     )
-    
     # Create a clickable area (a rectangular button) for the finish button.
     button_box = visual.Rect(
         win,
-        width=100,
-        height=0.25,
+        width=0.3,
+        height=0.1,
         pos=(0, -0.4),
         fillColor=None,
-        lineColor='black'
+        lineColor='black',
+        units='height'
     )
-    
     mouse = event.Mouse(visible=True, win=win)
     
     # Feedback collection loop.
     while True:
-        # Draw the static instruction text.
-        instruction_text_stim = visual.TextStim(
-            win,
-            text=instruction_text,
-            height=0.1,
-            wrapWidth=1,
-            color='black',
-            pos=(0, 0.4),
-            alignText='center'
-        )
+        # Draw the static instruction text.        
         instruction_text_stim.draw()
         
         # Draw the editable feedback textbox.
@@ -86,10 +81,9 @@ def ask_feedback(display: Display):
         
         # Check for mouse click on the Finish button.
         if mouse.getPressed()[0]:  # left button pressed
-            if button_box.contains(mouse.getPos()):
-                # Return the entered feedback.
-                feedback_text = feedback_box.text
-                return feedback_text
+            if mouse.getPressed()[0]:
+                if button_box.contains(mouse.getPos()):
+                    return feedback_box.text
         
         # Check for the escape key using your Display's built-in mechanism.
         keys = event.getKeys()

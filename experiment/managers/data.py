@@ -2,14 +2,13 @@ from typing import Optional, List, Dict, Tuple
 from psychopy import visual, core, event
 import csv
 import os
-import os
 import json
 from ..core import Participant, Trial
 
 class DataManager:
     """Manages data saving operations"""
-    def __init__(self, participant_id: str):
-        self.participant = Participant(participant_id)
+    def __init__(self, participant: Participant):
+        self.participant = participant
         self.ensure_data_dir()
     
     @staticmethod
