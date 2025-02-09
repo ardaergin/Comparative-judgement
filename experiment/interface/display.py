@@ -274,7 +274,7 @@ class Display:
         # Use a default prompt position (in height units) if none is provided.
         # Here, self.pos is the default center (0,0); we shift upward by 0.3 height units.
         prompt_position = prompt_pos if prompt_pos is not None else (self.pos[0], self.pos[1] + 0.3)
-        prompt_stim = self._create_text_stimulus(prompt, prompt_position)
+        prompt_stim = self._create_text_stimulus(prompt, prompt_position, bold=True)
         
         # If the options are provided as strings, automatically convert them.
         # We'll assign positions relative to the prompt position.
@@ -331,7 +331,7 @@ class Display:
         Returns:
             The user's response.
         """
-        question_stim = self._create_text_stimulus(question, (self.pos[0], self.pos[1] + 0.1))
+        question_stim = self._create_text_stimulus(question, (self.pos[0], self.pos[1] + 0.1), bold=True)
         response_stim = self._create_text_stimulus("", self.pos)
         if allowed_chars is None:
             allowed_chars = set(string.ascii_letters + string.digits + string.punctuation + " ")
