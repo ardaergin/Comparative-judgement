@@ -168,16 +168,13 @@ class Block:
         core.wait(0.5)
 
     def _show_break_screen(self, current_block: int):
-        """Display break screen between blocks"""
-        break_text = (
-            f"Block {current_block} of {self.n_blocks} completed.\n\n"
-            f"Please take a short break (~{self.config.break_wait_time} s).\n"
-            "Press SPACE when you are ready to continue."
-        )
+        """Display break screen between blocks with a countdown timer"""
+        remaining_time = self.config.break_wait_time
         
-        break_stim = visual.TextStim(
+        # Create the basic break text
+        break_text = visual.TextStim(
             self.window,
-            text=break_text,
+            text="",  # Will be updated each second
             color='black',
             font=self.config.font,
             height=self.config.text_height,
@@ -185,9 +182,59 @@ class Block:
             pos=(0, 0)
         )
         
-        break_stim.draw()
+        # Create countdown text
+        countdown_text = visual.TextStim(
+            self.window,
+            text="",  # Will be updated each second
+            color='black',
+            font=self.config.font,
+            height=self.config.text_height * 1.5,  # Slightly larger for visibility
+            pos=(0, -0.2)  # Position below the break text
+        )
+        
+        # Start countdown
+        timer = core.CountdownTimer(self.config.break_wait_time)
+        
+        while remaining_time > 0:
+            # Update remaining time
+            remaining_time = int(timer.getTime())
+            
+            # Update break text
+            break_text.text = (
+                f"Block {current_block} of {self.n_blocks} completed.\n\n"
+                f"Please take a short break.\n"
+                "You will be able to continue after 20 seconds."
+            )
+            
+            # Update countdown text
+            if remaining_time > 0:
+                countdown_text.text = f"{remaining_time}"
+            
+            # Draw both text stimuli
+            break_text.draw()
+            countdown_text.draw()
+            self.window.flip()
+            
+            # Check for escape key
+            if event.getKeys(keyList=['escape']):
+                core.quit()
+                
+            # Brief pause to prevent excessive CPU usage
+            core.wait(0.1)
+        
+        # Show continue message
+        break_text.text = (
+            f"Block {current_block} of {self.n_blocks} completed.\n\n"
+            "You can now continue.\n"
+            "Press SPACE when you are ready."
+        )
+        countdown_text.text = ""  # Clear the countdown
+        
+        break_text.draw()
+        countdown_text.draw()
         self.window.flip()
-        core.wait(self.config.break_wait_time)
+        
+        # Wait for space key
         event.waitKeys(keyList=['space'])
 
     def _handle_response(self, trial: Trial, keys) -> bool:
