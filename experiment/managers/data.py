@@ -30,8 +30,8 @@ class DataManager:
         with open(csv_path, 'a', newline='') as f:
             writer = csv.writer(f)
             if write_header:
-                writer.writerow(['trial', 'round_type', 'left_image', 'right_image', 'response', 'rt'])
-            writer.writerow(trial.to_csv_row())
+                writer.writerow(['id', 'trial', 'round_type', 'left_image', 'right_image', 'response', 'rt'])
+            writer.writerow(trial.to_csv_row(self.participant.participant_id))
     
     def save_demographics(self, demographics: Dict):
         """Save demographics to experiment data"""

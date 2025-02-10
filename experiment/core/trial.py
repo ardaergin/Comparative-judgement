@@ -13,9 +13,10 @@ class Trial:
     response: Optional[str] = None
     reaction_time: Optional[float] = None
     
-    def to_csv_row(self) -> List[str]:
+    def to_csv_row(self, participant_id) -> List[str]:
         """Convert trial data to CSV row format"""
         return [
+            participant_id,
             str(self.trial_num),
             self.round_type,
             self.pair.left_stimuli.filename,
