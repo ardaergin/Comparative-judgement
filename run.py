@@ -123,7 +123,7 @@ class ExperimentRunner:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             similarity_config = BlockConfig(
-                prompt_text="Which of the products on the bottom is more similar to the product on top?",
+                prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?",
                 num_breaks=3,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
@@ -154,7 +154,7 @@ class ExperimentRunner:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             liking_config = BlockConfig(
-                prompt_text="Which of the two plant-based steaks do you like more?",
+                prompt_text="Which of the two PLANT-BASED STEAKS do you LIKE more?",
                 num_breaks=3,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",

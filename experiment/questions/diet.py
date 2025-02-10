@@ -13,9 +13,9 @@ def ask_diet(display: Display):
     question = ("How would you describe your diet?")
     options = [
         "Omnivore (I eat animal products)",
-        "Vegetarian",
-        "Vegan",
-        "Pescatarian",
+        "Vegetarian (I do not eat meat nor fish, but I eat dairy products)",
+        "Vegan (I do not eat meat, fish nor dairy products)",
+        "Pescatarian (I eat fish but not meat)",
         "Other"
     ]
     
