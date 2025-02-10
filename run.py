@@ -124,7 +124,7 @@ class ExperimentRunner:
 
             similarity_config = BlockConfig(
                 prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?",
-                num_breaks=3,
+                num_breaks=2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
                 right_text="PLANT-BASED STEAK B",
@@ -155,7 +155,7 @@ class ExperimentRunner:
 
             liking_config = BlockConfig(
                 prompt_text="Which of the two PLANT-BASED STEAKS do you LIKE more?",
-                num_breaks=3,
+                num_breaks=2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
                 right_text="PLANT-BASED STEAK B",
