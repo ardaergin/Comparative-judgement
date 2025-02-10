@@ -148,22 +148,27 @@ class Block:
 
     def _show_feedback(self, chosen_stim: visual.ImageStim, trial: Trial):
         """Display feedback for chosen stimulus"""
-        # blue_border = visual.Rect(
-        #     self.window,
-        #     width=chosen_stim.psychopy_stim.size[0] + 0.05,
-        #     height=chosen_stim.psychopy_stim.size[1] + 0.05,
-        #     lineColor='blue',
-        #     lineWidth=0.5,
-        #     pos=chosen_stim.psychopy_stim.pos
-        # )
+        ## If just want to display the chosen image for feedback:
+        # chosen_stim.psychopy_stim.draw()
+        # self.window.flip()
+        # core.wait(0.5)
 
-        # self.prompt.draw()
-        # if trial.reference:
-        #     trial.reference.psychopy_stim.draw()
-        # trial.pair.left_stimuli.psychopy_stim.draw()
-        # trial.pair.right_stimuli.psychopy_stim.draw()
-        # blue_border.draw()
-        chosen_stim.psychopy_stim.draw()
+        blue_border = visual.Rect(
+            self.window,
+            width=chosen_stim.psychopy_stim.size[0] + 0.05,
+            height=chosen_stim.psychopy_stim.size[1] + 0.05,
+            lineColor='blue',
+            lineWidth=5,
+            pos=chosen_stim.psychopy_stim.pos
+        )
+
+        self.prompt.draw()
+        if trial.reference:
+            trial.reference.psychopy_stim.draw()
+        trial.pair.left_stimuli.psychopy_stim.draw()
+        trial.pair.right_stimuli.psychopy_stim.draw()
+        blue_border.draw()
+
         self.window.flip()
         core.wait(0.5)
 
