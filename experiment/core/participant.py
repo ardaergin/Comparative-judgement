@@ -12,7 +12,8 @@ class Participant:
     feedback: str = ""
     start_time: str = field(default_factory=lambda: datetime.now().strftime("%Y%m%d_%H%M%S")) # to initalize/write after ID is taken
     end_time: str = None # TODO: to inilize/write at the last screen
-    
+    duration: float = None
+
     def _get_datafile_name(self) -> str:
         """Ensure the filename is correctly formatted as a string"""
         return str(f"{self.participant_id}_{self.start_time}")
@@ -27,6 +28,13 @@ class Participant:
         """Record the end time of the experiment."""
         self.end_time = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+        # Convert start_time and end_time from string to datetime objects for duration calculation
+        start_dt = datetime.strptime(self.start_time, "%Y%m%d_%H%M%S")
+        end_dt = datetime.strptime(self.end_time, "%Y%m%d_%H%M%S")
+
+        # Compute duration in seconds
+        self.duration = (end_dt - start_dt).total_seconds()
+
     def add_feedback(self, feedback: str):
         self.feedback = feedback
     
@@ -36,6 +44,7 @@ class Participant:
             "participant_id": self.participant_id,
             "start_time": self.start_time,
             "end_time": self.end_time,
+            "duration": self.duration,
             "demographics": self.demographics,
             "feedback": self.feedback,
             "trials": [
