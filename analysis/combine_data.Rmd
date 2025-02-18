@@ -220,19 +220,30 @@ df_wide <- df_wide %>%
 ## Adding comparison identifier
 ```{r}
 df_long <- df_long %>%
-  mutate(
+  dplyr::mutate(
     # Create a consistent order for the stimulus filenames
     stim1 = pmin(left_stimulus, right_stimulus),
     stim2 = pmax(left_stimulus, right_stimulus),
     # Create a pair key that combines the two filenames
-    pair_key = paste(stim1, stim2, sep = "_")
+    pair_key = dplyr::if_else(
+      round_type == "practice",
+      paste("practice", stim1, stim2, sep = "_"),
+      paste(stim1, stim2, sep = "_")
+    )
   ) %>%
   # Create a unique comparison ID by converting the pair key into a factor
-  mutate(
+  dplyr::mutate(
     comparison_id = as.integer(factor(pair_key))
   )
-  # Remove the temporary columns
-  select(-stim1, -stim2, -pair_key)
+
+df_long <- df_long %>% dplyr::select(-stim1, -stim2, -pair_key)
+```
+
+Also creating a df for convenience, to lookup with ID corresponds to which comparison
+```{r}
+df_lookup <- df_long %>%
+  select(round_type, left_stimulus, right_stimulus, comparison_order, comparison_id) %>%
+  distinct()
 ```
 
 
@@ -251,6 +262,6 @@ write.csv(df_long, file = file.path(working_dir, "df_long.csv"), row.names = FAL
 write.csv(df_wide, file = file.path(working_dir, "df_wide.csv"), row.names = FALSE)
 
 # Save both data frames in a single .RData file
-save(df_long, df_wide, file = file.path(working_dir, "combined_data.RData"))
+save(df_long, df_wide, df_lookup, file = file.path(working_dir, "combined_data.RData"))
 ```
 
