@@ -16,6 +16,7 @@ class BlockConfig:
     right_text: str = "Right Image"
     reference_text: str = "Reference Image"
     text_height: int = 0.03
+    referant_present: bool = False
 
 class Block:
     """Manages a block of trials with consistent configuration and presentation"""
@@ -77,7 +78,35 @@ class Block:
 
     def _get_image_positions(self, round_type: str) -> dict:
         """Get positions for images and labels based on round type in normalized units"""
-        if round_type == "liking":
+        
+        if self.config.referant_present:
+            if round_type == "comparisonn":
+                return {
+                    # Comparison positions:
+                    'left_image': (-0.3, -0.25),
+                    'left_text': (-0.3, -0.05),
+
+                    'right_image': (0.3, -0.25),
+                    'right_text': (0.3, -0.05),
+
+                    # Reference positions:
+                    'reference_text': (0, 0.30),
+                    'reference_image': (0, 0.15)
+                }
+            else: # if round_type == "pracice":
+                return {
+                    # Comparison positions:
+                    'left_image': (-0.3, -0.25),
+                    'left_text': (-0.3, -0.05),
+
+                    'right_image': (0.3, -0.25),
+                    'right_text': (0.3, -0.05),
+
+                    # Reference positions:
+                    'reference_text': (0, 0.35),
+                    'reference_image': (0, 0.15)
+                }
+        else:
             return {
                 # Comparison positions:
                 'left_image': (-0.3, 0),
@@ -85,32 +114,6 @@ class Block:
 
                 'right_image': (0.3, 0),
                 'right_text': (0.3, 0.2)
-            }
-        elif round_type == "comparisonn":
-            return {
-                # Comparison positions:
-                'left_image': (-0.3, -0.25),
-                'left_text': (-0.3, -0.05),
-
-                'right_image': (0.3, -0.25),
-                'right_text': (0.3, -0.05),
-
-                # Reference positions:
-                'reference_text': (0, 0.30),
-                'reference_image': (0, 0.15)
-            }
-        else: # if round_type == "pracice":
-            return {
-                # Comparison positions:
-                'left_image': (-0.3, -0.25),
-                'left_text': (-0.3, -0.05),
-
-                'right_image': (0.3, -0.25),
-                'right_text': (0.3, -0.05),
-
-                # Reference positions:
-                'reference_text': (0, 0.35),
-                'reference_image': (0, 0.15)
             }
 
     def _create_text_stimuli(self, positions: dict, round_type: str) -> dict:
@@ -134,7 +137,7 @@ class Block:
             )
         }
         
-        if round_type != "liking":
+        if self.config.referant_present:
             text_stimuli['reference'] = visual.TextStim(
                 self.window,
                 text=self.config.reference_text,
@@ -163,7 +166,7 @@ class Block:
         )
 
         self.prompt.draw()
-        if trial.reference:
+        if self.config.referant_present:
             trial.reference.psychopy_stim.draw()
         trial.pair.left_stimuli.psychopy_stim.draw()
         trial.pair.right_stimuli.psychopy_stim.draw()
@@ -282,7 +285,7 @@ class Block:
 
             # Draw trial
             self.prompt.draw()
-            if trial.reference and trial.round_type != "liking":
+            if trial.reference and self.config.referant_present:
                 trial.reference.set_position(positions['reference_image'])
                 trial.reference.psychopy_stim.draw()
                 text_stimuli['reference'].draw()
