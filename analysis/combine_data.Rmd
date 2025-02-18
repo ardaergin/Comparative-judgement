@@ -62,10 +62,10 @@ for (file in json_files) {
   reaction_times  <- sapply(data$trials, function(trial) trial$reaction_time)
   avg_reaction_time <- mean(as.numeric(reaction_times), na.rm = TRUE)
   
-  # Compute percentage of missed trials
+  # Compute percentage of missed trials (i.e., when response is "missed")
   total_trials <- length(trial_responses)
   missed_perc <- if (total_trials > 0) {
-    sum(is.na(trial_responses)) / total_trials * 100
+    sum(trial_responses == "missed") / total_trials * 100
   } else {
     NA
   }
@@ -141,13 +141,116 @@ df_long <- dplyr::bind_rows(trial_rows)
 df_wide <- dplyr::bind_rows(participant_rows)
 ```
 
+## Convert Column Types
+```{r}
+# For the long-format data frame:
+df_long <- df_long %>%
+  mutate(
+    participant_id   = as.factor(participant_id),
+    trial_num        = as.numeric(trial_num),
+    round_type       = factor(round_type, levels = c("practice", "similarity", "liking")),
+    left_stimulus    = as.character(left_stimulus),
+    right_stimulus   = as.character(right_stimulus),
+    comparison_order = factor(comparison_order, 
+                              levels = c(1, 2)),
+    response         = factor(response, 
+                              levels = c("d", "k", "missed"), 
+                              labels = c("left", "right", "missed")),
+    reaction_time    = as.numeric(reaction_time),
+    start_time       = as.character(start_time),
+    end_time         = as.character(end_time),
+    duration         = as.numeric(duration),
+    gender           = factor(gender, 
+                               levels = c(1,2,3,4), 
+                               labels = c("Male", "Female", "Non-binary", "Prefer not to say")),
+    age              = as.numeric(age),
+    nationality      = as.factor(nationality),
+    diet             = factor(diet, 
+                               levels = c(1,2,3,4,5), 
+                               labels = c("Omnivore",
+                                          "Vegetarian",
+                                          "Vegan",
+                                          "Pescatarian",
+                                          "Other")),
+    eat_frequency    = factor(eat_frequency, 
+                               levels = c(1,2,3,4,5,6), 
+                               labels = c("Never",
+                                          "Once every three months",
+                                          "Once a month",
+                                          "Once a week",
+                                          "A couple of times per week",
+                                          "Every day")),
+  )
+
+# For the wide-format (participant-level) data frame:
+df_wide <- df_wide %>%
+  mutate(
+    participant_id    = as.factor(participant_id),
+    start_time        = as.character(start_time),
+    end_time          = as.character(end_time),
+    duration          = as.numeric(duration),
+    gender            = factor(gender, 
+                               levels = c(1,2,3,4), 
+                               labels = c("Male", "Female", "Non-binary", "Prefer not to say")),
+    age               = as.numeric(age),
+    nationality       = as.factor(nationality),
+    diet              = factor(diet, 
+                               levels = c(1,2,3,4,5), 
+                               labels = c("Omnivore",
+                                          "Vegetarian",
+                                          "Vegan",
+                                          "Pescatarian",
+                                          "Other")),
+    eat_frequency     = factor(eat_frequency, 
+                               levels = c(1,2,3,4,5,6), 
+                               labels = c("Never",
+                                          "Once every three months",
+                                          "Once a month",
+                                          "Once a week",
+                                          "A couple of times per week",
+                                          "Every day")),
+    avg_reaction_time = as.numeric(avg_reaction_time),
+    missed_perc       = as.numeric(missed_perc),
+    d_perc_practice   = as.numeric(d_perc_practice),
+    d_perc_similarity = as.numeric(d_perc_similarity),
+    d_perc_liking     = as.numeric(d_perc_liking)
+  )
+```
+
+## Adding comparison identifier
+```{r}
+df_long <- df_long %>%
+  mutate(
+    # Create a consistent order for the stimulus filenames
+    stim1 = pmin(left_stimulus, right_stimulus),
+    stim2 = pmax(left_stimulus, right_stimulus),
+    # Create a pair key that combines the two filenames
+    pair_key = paste(stim1, stim2, sep = "_")
+  ) %>%
+  # Create a unique comparison ID by converting the pair key into a factor
+  mutate(
+    comparison_id = as.integer(factor(pair_key))
+  )
+  # Remove the temporary columns
+  select(-stim1, -stim2, -pair_key)
+```
+
+
+## Saving to .csv and .Rdata
+If you are working with R, you can directly load `load("../data/working/combined_data.RData")`.
 
 ```{r}
+# Ensure the directory exists
+working_dir <- "../data/working"
+if (!dir.exists(working_dir)) {
+  dir.create(working_dir, recursive = TRUE)
+}
+
 # Save trial-level and participant-level data frames to CSV files
-write.csv(df_long, file = "../data/working/df_long.csv", row.names = FALSE)
-write.csv(df_wide, file = "../data/working/df_wide.csv", row.names = FALSE)
+write.csv(df_long, file = file.path(working_dir, "df_long.csv"), row.names = FALSE)
+write.csv(df_wide, file = file.path(working_dir, "df_wide.csv"), row.names = FALSE)
 
 # Save both data frames in a single .RData file
-save(df_long, df_wide, file = "../data/working/combined_data.RData")
+save(df_long, df_wide, file = file.path(working_dir, "combined_data.RData"))
 ```
 
