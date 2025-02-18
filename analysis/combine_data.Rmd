@@ -1,0 +1,153 @@
+---
+title: "combine_data"
+author: "Arda Ergin"
+date: "2025-02-18"
+output: html_document
+---
+
+## Setup
+```{r}
+# Install required packages if not already installed
+# install.packages(c("jsonlite", "dplyr", "purrr"))
+
+library(jsonlite)
+library(dplyr)
+library(purrr)
+```
+
+## Data folder selection
+```{r}
+# Define the folder where your JSON files are stored
+folder_path <- "../data"
+json_files <- list.files(path = folder_path, pattern = "\\.json$", full.names = TRUE)
+
+# Check if this list is non-empty
+# if empty, check `getwd()`,
+# and set currrent working directory to the correct location, 
+# the location should be where this combine_data.Rmd is located
+# i.e., "......../GitHub/Comparative-judgement/analysis"
+```
+
+## Main loop
+**Aim**: to create two data frames:
+- One with *long-format* with all trial-level info as well as participant-level.
+- One with *wide-format* that has participant-level info, but also some trial-level info that is aggregated: i.e., average reaction time, percentage of choosing left (pressing "d") for each round type, 
+
+```{r}
+# Initialize empty lists for trial-level and participant-level data
+trial_rows <- list()
+participant_rows <- list()
+
+# Loop over each JSON file
+for (file in json_files) {
+  # Read the JSON file
+  data <- jsonlite::fromJSON(file, simplifyVector = FALSE)
+  
+  # Extract participant-level info
+  participant_id <- data$participant_id
+  start_time     <- data$start_time
+  end_time       <- data$end_time
+  duration       <- data$duration
+  
+  # Extract demographics (with defaults if keys are missing)
+  demographics  <- data$demographics %||% list()
+  gender        <- demographics$gender %||% NA
+  age           <- demographics$age %||% NA
+  nationality   <- demographics$nationality %||% NA
+  diet          <- demographics$diet %||% NA
+  eat_frequency <- demographics$eat_frequency %||% NA
+  
+  # Compute overall summary measures for the participant
+  trial_responses <- sapply(data$trials, function(trial) trial$response)
+  reaction_times  <- sapply(data$trials, function(trial) trial$reaction_time)
+  avg_reaction_time <- mean(as.numeric(reaction_times), na.rm = TRUE)
+  
+  # Compute percentage of missed trials
+  total_trials <- length(trial_responses)
+  missed_perc <- if (total_trials > 0) {
+    sum(is.na(trial_responses)) / total_trials * 100
+  } else {
+    NA
+  }
+  
+  # Function to compute percentage of "d" responses for a given round type
+  get_d_percentage <- function(round_type_val) {
+    # Filter trials matching the round type
+    responses <- sapply(data$trials, function(trial) {
+      if (trial$round_type == round_type_val) trial$response else NA
+    })
+    # Remove NAs (i.e., trials that are not of this round_type)
+    responses <- responses[!is.na(responses)]
+    total <- length(responses)
+    if(total > 0) {
+      d_count <- sum(responses == "d", na.rm = TRUE)
+      return(d_count / total * 100)
+    } else {
+      return(NA)
+    }
+  }
+  
+  # Calculate percentages for each round type
+  d_perc_practice   <- get_d_percentage("practice")
+  d_perc_similarity <- get_d_percentage("similarity")
+  d_perc_liking     <- get_d_percentage("liking")
+  
+  # Create and store a participant-level row
+  participant_row <- list(
+    participant_id    = participant_id,
+    start_time        = start_time,
+    end_time          = end_time,
+    duration          = duration,
+    gender            = gender,
+    age               = age,
+    nationality       = nationality,
+    diet              = diet,
+    eat_frequency     = eat_frequency,
+    avg_reaction_time = avg_reaction_time,
+    missed_perc       = missed_perc,
+    d_perc_practice   = d_perc_practice,
+    d_perc_similarity = d_perc_similarity,
+    d_perc_liking     = d_perc_liking
+  )
+  participant_rows <- append(participant_rows, list(participant_row))
+  
+  # Iterate over the trials to create trial-level rows
+  for (trial in data$trials) {
+    trial_row <- list(
+      participant_id   = participant_id,
+      trial_num        = trial$trial_num,
+      round_type       = trial$round_type,
+      left_stimulus    = trial$left_stimulus,
+      right_stimulus   = trial$right_stimulus,
+      comparison_order = trial$comparison_order,
+      response         = trial$response,
+      reaction_time    = trial$reaction_time,
+      start_time       = start_time,
+      end_time         = end_time,
+      duration         = duration,
+      gender           = gender,
+      age              = age,
+      nationality      = nationality,
+      diet             = diet,
+      eat_frequency    = eat_frequency
+    )
+    
+    trial_rows <- append(trial_rows, list(trial_row))
+  }
+}
+
+# Combine all rows into data frames
+df_long <- dplyr::bind_rows(trial_rows)
+df_wide <- dplyr::bind_rows(participant_rows)
+```
+
+
+```{r}
+# Save trial-level and participant-level data frames to CSV files
+write.csv(df_long, file = "../data/working/df_long.csv", row.names = FALSE)
+write.csv(df_wide, file = "../data/working/df_wide.csv", row.names = FALSE)
+
+# Save both data frames in a single .RData file
+save(df_long, df_wide, file = "../data/working/combined_data.RData")
+```
+
