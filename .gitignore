@@ -6,3 +6,6 @@
 /literature
 /images
 *.Rhistory
+analysis/combine_data.Rmd
+analysis/combine_data.html
+analysis/combine_data.Rmd
