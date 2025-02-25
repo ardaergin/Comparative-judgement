@@ -2,7 +2,9 @@
 
 This is the repository for comparative judgement research.
 
-## Installation for Mac
+## Installation
+
+### Installation for Mac
 
 For Mac, you must first download **Homebrew**. Homebrew is a tool that helps you install software like Python on your Mac.
 
@@ -61,7 +63,7 @@ images/
 > **Important Note**: The program will load and process images based on their folder location, not based on their name. Hence, the image names can be anything you want, but the folder names must follow the structure described above.
 
 
-## Installation for the Lab
+### Installation for Windows (in the Lab)
 
 1. **Install Git**:
    - Download and install Git from [this link](https://git-scm.com/).
@@ -102,9 +104,18 @@ images/
      ```
     - This sets up the virtual environement that is used for running the experiment, and downloads the required libraries like `psychopy`.
 
-## Updating the Repository
+## Running the experiment (in Mac)
+First, you must open Terminal and navigate to the location of the repository. For how to do that, you can follow the same steps described for the section "Installation For Mac".
 
-To update the local copy of the repository in the lab with the latest changes from the server:
+Once you are in the 'Comparative-judgement' directory (this should be displayed right before the `%` in the terminal), you can run:
+```shell
+python3 run.py
+```
+
+
+## Updating the Repository in the Lab
+
+To update the local copy of the repository in the lab with the latest changes in GitHub:
 
 1. Navigate to the repository folder in Git Bash:
    ```bash
