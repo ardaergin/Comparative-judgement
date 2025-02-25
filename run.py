@@ -91,7 +91,7 @@ class ExperimentRunner:
                 pair_repeats=self.pair_repeats)
             
             practice_config = BlockConfig(
-                prompt_text="Which of the products on the bottom is more similar to the product on top?",
+                prompt_text="Which of the two citrus fruits is more similar to A TYPICAL ORANGE?",
                 num_breaks=0,
                 left_text="Citrus fruit A",
                 right_text="Citrus fruit B",
@@ -123,7 +123,7 @@ class ExperimentRunner:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             similarity_config = BlockConfig(
-                prompt_text="Which of the two plant-based steaks on the bottom is more similar to the beef steak on top?",
+                prompt_text="Which of the two PLANT-BASED STEAKS is more similar to A TYPICAL BEEF-STEAK?",
                 num_breaks=2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
