@@ -80,7 +80,7 @@ class Block:
         """Get positions for images and labels based on round type in normalized units"""
         
         if self.config.referant_present:
-            if round_type == "comparisonn":
+            if round_type == "experimental_trial":
                 return {
                     # Comparison positions:
                     'left_image': (-0.3, -0.25),
@@ -106,7 +106,7 @@ class Block:
                     'reference_text': (0, 0.35),
                     'reference_image': (0, 0.15)
                 }
-        else:
+        else: # (if referent not present)
             return {
                 # Comparison positions:
                 'left_image': (-0.3, 0),

@@ -8,7 +8,7 @@ class Trial:
     """Represents a single trial"""
     trial_num: int
     pair: Comparison
-    round_type: str  # "practice", "similarity", or "liking"
+    round_type: str  # "practice" or "experimental_trial"
     reference: Optional[Stimulus] = None
     response: Optional[str] = None
     reaction_time: Optional[float] = None

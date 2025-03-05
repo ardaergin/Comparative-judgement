@@ -117,7 +117,7 @@ class ExperimentRunner:
             # -------------------------
             # Prepare the similarity block
             similarity_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="similarity", 
+                round_type="experimental_trial", 
                 pair_repeats=self.pair_repeats)
             for trial in similarity_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
@@ -148,7 +148,7 @@ class ExperimentRunner:
             # -------------------------
             # Generate liking trials (for liking, you might not include a reference image)
             liking_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="liking", 
+                round_type="experimental_trial", 
                 pair_repeats=self.pair_repeats)
             for trial in liking_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
