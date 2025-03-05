@@ -83,28 +83,28 @@ class Block:
             if round_type == "experimental_trial":
                 return {
                     # Comparison positions:
-                    'left_image': (-0.3, -0.25),
-                    'left_text': (-0.3, -0.05),
+                    'left_image': (-0.3, -0.20),
+                    'left_text': (-0.3, -0.00),
 
-                    'right_image': (0.3, -0.25),
-                    'right_text': (0.3, -0.05),
+                    'right_image': (0.3, -0.20),
+                    'right_text': (0.3, -0.00),
 
                     # Reference positions:
-                    'reference_text': (0, 0.30),
-                    'reference_image': (0, 0.15)
+                    'reference_text': (0, 0.25),
+                    'reference_image': (0, 0.10)
                 }
             else: # if round_type == "pracice":
                 return {
                     # Comparison positions:
-                    'left_image': (-0.3, -0.25),
-                    'left_text': (-0.3, -0.05),
+                    'left_image': (-0.3, -0.20),
+                    'left_text': (-0.3, -0.00),
 
-                    'right_image': (0.3, -0.25),
-                    'right_text': (0.3, -0.05),
+                    'right_image': (0.3, -0.20),
+                    'right_text': (0.3, -0.00),
 
                     # Reference positions:
-                    'reference_text': (0, 0.35),
-                    'reference_image': (0, 0.15)
+                    'reference_text': (0, 0.30),
+                    'reference_image': (0, 0.10)
                 }
         else: # (if referent not present)
             return {
