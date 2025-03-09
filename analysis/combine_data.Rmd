@@ -18,7 +18,7 @@ library(purrr)
 ## Data folder selection
 ```{r}
 # Define the folder where your JSON files are stored
-folder_path <- "../data"
+folder_path <- "/Users/mac/ownCloud/Postdoc Bojana/Project 1 - Similarity-Liking tool/Study 1/data"
 json_files <- list.files(path = folder_path, pattern = "\\.json$", full.names = TRUE)
 
 # Check if this list is non-empty
@@ -209,7 +209,7 @@ df_wide <- df_wide %>%
                                           "Once a week",
                                           "A couple of times per week",
                                           "Every day")),
-    avg_reaction_time = as.numeric(avg_reaction_time),
+    #avg_reaction_time = as.numeric(avg_reaction_time),
     missed_perc       = as.numeric(missed_perc),
     d_perc_practice   = as.numeric(d_perc_practice),
     d_perc_similarity = as.numeric(d_perc_similarity),
