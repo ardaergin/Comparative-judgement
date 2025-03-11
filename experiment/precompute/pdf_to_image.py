@@ -1,4 +1,6 @@
 import fitz  # PyMuPDF
+import os
+import glob
 
 def convert_pdf_to_images(pdf_path, output_format="png", dpi=300):
     doc = fitz.open(pdf_path)
@@ -27,4 +29,11 @@ def convert_pdf_to_images(pdf_path, output_format="png", dpi=300):
     doc.close()
 
 if __name__ == '__main__':
-    convert_pdf_to_images("instructions.pdf", output_format="png", dpi=288)
+    # Find the first (and presumably only) PDF file in the instructions directory
+    pdf_files = glob.glob("instructions/*.pdf")
+    if not pdf_files:
+        raise FileNotFoundError("No PDF files found in the instructions directory")
+    if len(pdf_files) > 1:
+        print("Warning: Multiple PDF files found. Using the first one.")
+    
+    convert_pdf_to_images(pdf_files[0], output_format="png", dpi=288)
