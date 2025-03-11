@@ -73,7 +73,7 @@ class Block:
             font=self.config.font,
             height=self.config.text_height,
             wrapWidth=5, # very large so it does not wrap.
-            pos=(0, 0.45)
+            pos=(0, 0.40)
         )
 
     def _get_image_positions(self, round_type: str) -> dict:
@@ -109,11 +109,11 @@ class Block:
         else: # (if referent not present)
             return {
                 # Comparison positions:
-                'left_image': (-0.3, 0),
-                'left_text': (-0.3, 0.2),
+                'left_text': (-0.3, 0.15),
+                'left_image': (-0.3, -0.05),
 
-                'right_image': (0.3, 0),
-                'right_text': (0.3, 0.2)
+                'right_text': (0.3, 0.15),
+                'right_image': (0.3, -0.05)
             }
 
     def _create_text_stimuli(self, positions: dict, round_type: str) -> dict:
