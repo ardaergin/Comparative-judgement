@@ -154,7 +154,7 @@ class ExperimentRunner:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             liking_config = BlockConfig(
-                prompt_text="Which of the two plant-based steaks do you LIKE MORE?",
+                prompt_text="Which one of the two plant-based steaks would you PREFER TO BUY?",
                 num_breaks=2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
