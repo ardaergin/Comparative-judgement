@@ -2,7 +2,7 @@ import fitz  # PyMuPDF
 import os
 import glob
 
-def convert_pdf_to_images(pdf_path, output_format="png", dpi=72):
+def convert_pdf_to_images(pdf_path, output_format="png", dpi=144):
     doc = fitz.open(pdf_path)
     zoom = dpi / 72  # Converting DPI to scaling factor (default PDF DPI is 72)
     matrix = fitz.Matrix(zoom, zoom)
@@ -36,4 +36,4 @@ if __name__ == '__main__':
     if len(pdf_files) > 1:
         print("Warning: Multiple PDF files found. Using the first one.")
     
-    convert_pdf_to_images(pdf_files[0], output_format="png", dpi=72)
+    convert_pdf_to_images(pdf_files[0], output_format="png", dpi=144)
