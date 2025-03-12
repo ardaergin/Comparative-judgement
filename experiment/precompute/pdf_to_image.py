@@ -36,4 +36,4 @@ if __name__ == '__main__':
     if len(pdf_files) > 1:
         print("Warning: Multiple PDF files found. Using the first one.")
     
-    convert_pdf_to_images(pdf_files[0], output_format="png", dpi=288)
+    convert_pdf_to_images(pdf_files[0], output_format="png", dpi=432)
