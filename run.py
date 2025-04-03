@@ -91,7 +91,7 @@ class ExperimentRunner:
                 pair_repeats=self.pair_repeats)
             
             practice_config = BlockConfig(
-                prompt_text="Which of the two citrus fruits is MORE SIMILAR to a prototypical ORANGE?",
+                prompt_text="Which of the two citrus fruits do you LIKE MORE?",
                 num_breaks=0,
                 left_text="Citrus fruit A",
                 right_text="Citrus fruit B",
@@ -111,6 +111,36 @@ class ExperimentRunner:
             
             # Show aftermath of practice
             self.display.display_stimulus(self.screens["practice_aftermath"])
+            
+            # -------------------------
+            # LIKING BLOCK
+            # -------------------------
+            # Generate liking trials (for liking, you might not include a reference image)
+            liking_trials = self.trial_stimuli_manager.generate_trials(
+                round_type="experimental_trial", 
+                pair_repeats=self.pair_repeats)
+            for trial in liking_trials:
+                print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
+
+            liking_config = BlockConfig(
+                prompt_text="Which one of the two plant-based steaks would you PREFER TO BUY?",
+                num_breaks=2,
+                break_wait_time=20,
+                left_text="PLANT-BASED STEAK A",
+                right_text="PLANT-BASED STEAK B",
+            )
+            liking_block = Block(
+                self.display.window, 
+                trials=liking_trials, 
+                config=liking_config,
+                data_manager=data_manager)
+            
+            # Display liking instructions
+            self.display.display_stimulus(self.screens["liking_instructions"])
+            self.display.display_stimulus(self.screens["liking_instructions_visual"])
+            
+            # Run liking block
+            liking_block.run()
 
             # -------------------------
             # SIMILARITY BLOCK
@@ -142,36 +172,6 @@ class ExperimentRunner:
             
             # Run similarity block
             similarity_block.run()
-            
-            # -------------------------
-            # LIKING BLOCK
-            # -------------------------
-            # Generate liking trials (for liking, you might not include a reference image)
-            liking_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="experimental_trial", 
-                pair_repeats=self.pair_repeats)
-            for trial in liking_trials:
-                print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
-
-            liking_config = BlockConfig(
-                prompt_text="Which one of the two plant-based steaks would you PREFER TO BUY?",
-                num_breaks=2,
-                break_wait_time=20,
-                left_text="PLANT-BASED STEAK A",
-                right_text="PLANT-BASED STEAK B",
-            )
-            liking_block = Block(
-                self.display.window, 
-                trials=liking_trials, 
-                config=liking_config,
-                data_manager=data_manager)
-            
-            # Display liking instructions
-            self.display.display_stimulus(self.screens["liking_instructions"])
-            self.display.display_stimulus(self.screens["liking_instructions_visual"])
-            
-            # Run liking block
-            liking_block.run()
 
             # -------------------------
             # DEMOGRAPHICS AND FEEDBACK
