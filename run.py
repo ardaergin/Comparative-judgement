@@ -117,13 +117,13 @@ class ExperimentRunner:
             # -------------------------
             # Generate liking trials (for liking, you might not include a reference image)
             liking_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="experimental_trial", 
+                round_type="liking", 
                 pair_repeats=self.pair_repeats)
             for trial in liking_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             liking_config = BlockConfig(
-                prompt_text="Which one of the two plant-based steaks would you PREFER TO BUY?",
+                prompt_text="Which one of the two plant-based steaks do you LIKE MORE?",
                 num_breaks=2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
@@ -147,7 +147,7 @@ class ExperimentRunner:
             # -------------------------
             # Prepare the similarity block
             similarity_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="experimental_trial", 
+                round_type="similarity", 
                 pair_repeats=self.pair_repeats)
             for trial in similarity_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
