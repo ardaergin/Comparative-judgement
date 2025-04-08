@@ -153,7 +153,7 @@ class ExperimentRunner:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             similarity_config = BlockConfig(
-                prompt_text="Which of the two plant-based steaks is MORE SIMILAR to a prototypical BEEF STEAK?",
+                prompt_text="Which of the two plant-based steaks on the bottom is MORE SIMILAR to the BEEF STEAK on top?",
                 num_breaks=2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
