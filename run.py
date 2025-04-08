@@ -158,6 +158,7 @@ class ExperimentRunner:
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
                 right_text="PLANT-BASED STEAK B",
+                reference_text="BEEF STEAK",
                 referant_present=True
             )
             similarity_block = Block(
