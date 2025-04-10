@@ -82,7 +82,7 @@ images/
 3. **Navigate to the Correct Folder**:
    - In Git Bash, change the directory to the shared folder:
      ```bash
-     cd /z/11-cubicle
+     cd /z
      ```
    - Replace `11-cubicle` with the name of the folder you want. Tip: Type the first few letters of the folder name and press **Tab** to autofill the name.
 
@@ -94,15 +94,6 @@ images/
 
 5. **Set Up Python**:
    - Install Python 3.10.11 from [this link](https://www.python.org/downloads/release/python-31011/).
-
-6. **Set Up the Experiment**:
-   - Once Python is installed, navigate to the repository folder in Git Bash and run:
-     ```bash
-     python3.10 -m venv .venv
-     source .venv/Scripts/activate
-     pip install -r requirements.txt
-     ```
-    - This sets up the virtual environement that is used for running the experiment, and downloads the required libraries like `psychopy`.
 
 ## Running the experiment (in Mac)
 First, you must open Terminal and navigate to the location of the repository. For how to do that, you can follow the same steps described for the section "Installation For Mac".
@@ -120,7 +111,6 @@ To update the local copy of the repository in the lab with the latest changes in
 1. Navigate to the repository folder in Git Bash:
    ```bash
    cd Z:
-   cd 11-cubicle\ lab/
    cd Comparative-judgement
    ```
 

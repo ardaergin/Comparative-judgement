@@ -173,8 +173,6 @@ class ExperimentRunner:
             
             # Run similarity block
             similarity_block.run()
-            
-            
 
             # -------------------------
             # DEMOGRAPHICS AND FEEDBACK
