@@ -111,20 +111,20 @@ class ExperimentRunner:
             
             # Show aftermath of practice
             self.display.display_stimulus(self.screens["practice_aftermath"])
-            
+
             # -------------------------
             # LIKING BLOCK
             # -------------------------
             # Generate liking trials (for liking, you might not include a reference image)
             liking_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="liking", 
+                round_type="liking", #experimental_trial
                 pair_repeats=self.pair_repeats)
             for trial in liking_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             liking_config = BlockConfig(
                 prompt_text="Which one of the two plant-based steaks do you LIKE MORE?",
-                num_breaks=2,
+                num_breaks=1, #2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
                 right_text="PLANT-BASED STEAK B",
@@ -147,19 +147,19 @@ class ExperimentRunner:
             # -------------------------
             # Prepare the similarity block
             similarity_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="similarity", 
+                round_type="similarity", #"experimental_trial", 
                 pair_repeats=self.pair_repeats)
             for trial in similarity_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             similarity_config = BlockConfig(
-                prompt_text="Which of the two plant-based steaks on the bottom is MORE SIMILAR to the BEEF STEAK on top?",
-                num_breaks=2,
+                prompt_text="Which of the two plant-based steaks is MORE SIMILAR to a prototypical BEEF STEAK?",
+                num_breaks=1, #2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
                 right_text="PLANT-BASED STEAK B",
                 reference_text="BEEF STEAK",
-                referant_present=True
+                referant_present = True
             )
             similarity_block = Block(
                 self.display.window, 

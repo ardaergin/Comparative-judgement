@@ -6,6 +6,7 @@ import os
 import itertools
 import os
 from ..core import Stimulus, Comparison, Trial
+import numpy as np
 
 class StimuliManager:
     """Manages stimuli loading and trial generation"""
@@ -82,8 +83,18 @@ class StimuliManager:
         trials = []
         trial_num = 1
         for _ in range(pair_repeats):
+            
+            # Get shuffled pairs for first presentation
             shuffled_pairs = random.sample(self.pairs, len(self.pairs))
-            for pair in shuffled_pairs:
+            
+            # Create reversed pairs for second presentation
+            reversed_pairs = [Comparison(left_stimuli=pair.right_stimuli, right_stimuli=pair.left_stimuli) 
+                            for pair in shuffled_pairs]
+            
+            # Combine original and reversed pairs
+            all_pairs_presentation = np.append(shuffled_pairs, reversed_pairs)
+            
+            for pair in all_pairs_presentation:
                 trials.append(Trial(
                     trial_num=trial_num,
                     pair=pair,
