@@ -91,7 +91,7 @@ class ExperimentRunner:
                 pair_repeats=self.pair_repeats)
             
             practice_config = BlockConfig(
-                prompt_text="Which of the two citrus fruits is MORE SIMILAR to a prototypical ORANGE?",
+                prompt_text="Which of the two citrus fruits do you LIKE MORE?",
                 num_breaks=0,
                 left_text="Citrus fruit A",
                 right_text="Citrus fruit B",
@@ -113,49 +113,18 @@ class ExperimentRunner:
             self.display.display_stimulus(self.screens["practice_aftermath"])
 
             # -------------------------
-            # SIMILARITY BLOCK
-            # -------------------------
-            # Prepare the similarity block
-            similarity_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="experimental_trial", 
-                pair_repeats=self.pair_repeats)
-            for trial in similarity_trials:
-                print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
-
-            similarity_config = BlockConfig(
-                prompt_text="Which of the two plant-based steaks is MORE SIMILAR to a prototypical BEEF STEAK?",
-                num_breaks=2,
-                break_wait_time=20,
-                left_text="PLANT-BASED STEAK A",
-                right_text="PLANT-BASED STEAK B",
-                reference_text="BEEF STEAK"
-            )
-            similarity_block = Block(
-                self.display.window, 
-                trials=similarity_trials, 
-                config=similarity_config,
-                data_manager=data_manager)
-            
-            # Display similarity instructions (you can choose to show one or both screens)
-            self.display.display_stimulus(self.screens["similarity_instructions"])
-            self.display.display_stimulus(self.screens["similarity_instructions_visual"])
-            
-            # Run similarity block
-            similarity_block.run()
-            
-            # -------------------------
             # LIKING BLOCK
             # -------------------------
             # Generate liking trials (for liking, you might not include a reference image)
             liking_trials = self.trial_stimuli_manager.generate_trials(
-                round_type="experimental_trial", 
+                round_type="liking", #experimental_trial
                 pair_repeats=self.pair_repeats)
             for trial in liking_trials:
                 print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
 
             liking_config = BlockConfig(
-                prompt_text="Which one of the two plant-based steaks would you PREFER TO BUY?",
-                num_breaks=2,
+                prompt_text="Which one of the two plant-based steaks do you LIKE MORE?",
+                num_breaks=1, #2,
                 break_wait_time=20,
                 left_text="PLANT-BASED STEAK A",
                 right_text="PLANT-BASED STEAK B",
@@ -172,6 +141,40 @@ class ExperimentRunner:
             
             # Run liking block
             liking_block.run()
+
+            # -------------------------
+            # SIMILARITY BLOCK
+            # -------------------------
+            # Prepare the similarity block
+            similarity_trials = self.trial_stimuli_manager.generate_trials(
+                round_type="similarity", #"experimental_trial", 
+                pair_repeats=self.pair_repeats)
+            for trial in similarity_trials:
+                print(trial.pair.left_stimuli.filename, trial.pair.right_stimuli.filename)
+
+            similarity_config = BlockConfig(
+                prompt_text="Which of the two plant-based steaks is MORE SIMILAR to a prototypical BEEF STEAK?",
+                num_breaks=1, #2,
+                break_wait_time=20,
+                left_text="PLANT-BASED STEAK A",
+                right_text="PLANT-BASED STEAK B",
+                reference_text="BEEF STEAK",
+                referant_present = True
+            )
+            similarity_block = Block(
+                self.display.window, 
+                trials=similarity_trials, 
+                config=similarity_config,
+                data_manager=data_manager)
+            
+            # Display similarity instructions (you can choose to show one or both screens)
+            self.display.display_stimulus(self.screens["similarity_instructions"])
+            self.display.display_stimulus(self.screens["similarity_instructions_visual"])
+            
+            # Run similarity block
+            similarity_block.run()
+            
+            
 
             # -------------------------
             # DEMOGRAPHICS AND FEEDBACK
