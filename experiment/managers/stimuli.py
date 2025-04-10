@@ -88,8 +88,8 @@ class StimuliManager:
             shuffled_pairs = random.sample(self.pairs, len(self.pairs))
             
             # Create reversed pairs for second presentation
-            reversed_pairs = [Comparison(left_stimuli=pair.right_stimuli, right_stimuli=pair.left_stimuli) 
-                            for pair in shuffled_pairs]
+            reversed_pairs = np.random.shuffle([Comparison(left_stimuli=pair.right_stimuli, right_stimuli=pair.left_stimuli) 
+                            for pair in shuffled_pairs])
             
             # Combine original and reversed pairs
             all_pairs_presentation = np.append(shuffled_pairs, reversed_pairs)
