@@ -84,14 +84,14 @@ class Block:
                 return {
                     # Comparison positions:
                     'left_image': (-0.3, -0.20),
-                    'left_text': (-0.3, -0.05),
+                    'left_text': (-0.3, 0.10),
 
                     'right_image': (0.3, -0.20),
-                    'right_text': (0.3, -0.05),
+                    'right_text': (0.3, 0.10),
 
                     # Reference positions:
-                    'reference_text': (0, 0.25),
-                    'reference_image': (0, 0.10)
+                    'reference_text': (0, 0.40),
+                    'reference_image': (0, 0.25)
                 }
             else: # if round_type == "pracice":
                 return {
