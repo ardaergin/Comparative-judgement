@@ -90,8 +90,8 @@ class Block:
                     'right_text': (0.3, -0.10),
 
                     # Reference positions:
-                    'reference_text': (0, 0.40),
-                    'reference_image': (0, 0.20)
+                    'reference_text': (0, 0.35),
+                    'reference_image': (0, 0.15)
                 }
             else: # if round_type == "pracice":
                 return {
