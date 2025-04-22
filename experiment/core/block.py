@@ -83,14 +83,14 @@ class Block:
             if round_type == "liking" or round_type == "similarity":
                 return {
                     # Comparison positions:
-                    'left_image': (-0.3, -0.20),
-                    'left_text': (-0.3, 0),
+                    'left_image': (-0.3, -0.25),
+                    'left_text': (-0.3, -0.05),
 
-                    'right_image': (0.3, -0.20),
-                    'right_text': (0.3, 0),
+                    'right_image': (0.3, -0.25),
+                    'right_text': (0.3, -0.05),
 
                     # Reference positions:
-                    'reference_text': (0, 0.30),
+                    'reference_text': (0, 0.35),
                     'reference_image': (0, 0.15)
                 }
             else: # if round_type == "pracice":
