@@ -12,7 +12,7 @@ class Stimulus:
     """
     filename: str
     image_path: str
-    target_height: int = 0.4
+    target_height: int = 0.3
     win: Optional[visual.Window] = None
     psychopy_stim: Optional[visual.ImageStim] = None
     orig_width: int = field(init=False)
